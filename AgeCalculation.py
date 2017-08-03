@@ -2009,10 +2009,10 @@ class Application_semcups():
         zero_two_atomic_err_final = lst_Thsemcups[10] * (10.**6)
         
         eight_nmol = eight_ppb / self.wt_238
-        eight_nmol_err = eight_nmol * (eight_ppb_wt_err/eight_ppb)
+        eight_nmol_err = eight_nmol * (eight_ppb_err/eight_ppb)
         
         zero_pmol = zero_pgg / self.wt_230
-        zero_pmol_err = zero_pmol * (zero_pgg_wt_err/zero_pgg)
+        zero_pmol_err = zero_pmol * (zero_pgg_err/zero_pgg)
         
         """
         Calculated atomic ratios
@@ -2363,10 +2363,10 @@ class Application_cups():
         zero_two_atomic_err_final = lst_Thcups[10] * (10.**6)
         
         eight_nmol = eight_ppb / self.wt_238
-        eight_nmol_err = eight_nmol * (eight_ppb_wt_err/eight_ppb)
+        eight_nmol_err = eight_nmol * (eight_ppb_err/eight_ppb)
         
         zero_pmol = zero_pgg / self.wt_230
-        zero_pmol_err = zero_pmol * (zero_pgg_wt_err/zero_pgg)
+        zero_pmol_err = zero_pmol * (zero_pgg_err/zero_pgg)
         
         
         """
@@ -2483,7 +2483,7 @@ class Application_cups():
                                                  (1 - np.exp((self.lambda_234 - self.lambda_230)*t)))
         
         corrected_ThUmin = fsolve(age_func_ThUmin, t_initial_guess)
-    
+        
         age_func_d234Umax = lambda t : corrected_zero_eight_activity - (1 - np.exp(-self.lambda_230*t) + ((d234U_m + d234U_m_err)/1000) * 
                                                  (self.lambda_230/(self.lambda_230-self.lambda_234)) * 
                                                  (1 - np.exp((self.lambda_234 - self.lambda_230)*t)))
@@ -3534,7 +3534,7 @@ class Calculation_forCups():
         zero_two_final = zero_two_chem_corrected
         zero_two_final_err = abs(zero_two_chem_corrected_err)
         
-        lstTh_Age = [zero_fmolg, zero_ppt, zero_ppt_err, zero_ppt_wt_err, two_pmolg, two_pmolg_wt_err, two_ppt, two_ppt_err, two_ppt_wt_err, zero_two_final, zero_two_final_err]
+        lstTh_Age = [zero_fmolg, zero_ppt, zero_ppt_err, zero_ppt_wt_err, two_pmolg, two_pmolg_err, two_ppt, two_ppt_err, two_ppt_wt_err, zero_two_final, zero_two_final_err]
         
         try:
             os.remove("Th.xlsx")
@@ -3830,7 +3830,7 @@ class Calculation_forCups():
         zero_two_final = zero_two_chem_corrected_mean
         zero_two_final_err = abs(zero_two_chem_corrected_err)
         
-        lstTh_Age = [zero_fmolg, zero_ppt, zero_ppt_err, zero_ppt_wt_err, two_pmolg, two_pmolg_wt_err, two_ppt, two_ppt_err, two_ppt_wt_err, zero_two_final, zero_two_final_err]
+        lstTh_Age = [zero_fmolg, zero_ppt, zero_ppt_err, zero_ppt_wt_err, two_pmolg, two_pmolg_err, two_ppt, two_ppt_err, two_ppt_wt_err, zero_two_final, zero_two_final_err]
         
         try:
             os.remove("Th.xlsx")
