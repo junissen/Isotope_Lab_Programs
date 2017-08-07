@@ -28,6 +28,9 @@ class Application(tk.Frame):
     Root GUI for working with AgeCalculation. Gives option of either running SEM or Cups for U/Th.
     """
     def __init__(self, master):
+        """
+        Initiates Tkinter window for importing U/Th run information
+        """
         
         tk.Frame.__init__(self, master)
         
@@ -36,6 +39,7 @@ class Application(tk.Frame):
         self.dialog_frame_top.pack()
         tk.Label(self.dialog_frame_top, text = "Welcome to the Age Calculation Program!", font = ('TkDefaultFont', 10) ).grid(row = 0, column = 0, sticky = 'e')
         
+        #list of global preset values for spike 233, spike 229, sample weight error, spike weight error, 230/232i, and 230/232i error
         global preset_values
         preset_values = [0.0, 0.0, 0.0001, 0.0003, 4.4E-6, 2.2E-6]
         
@@ -43,10 +47,13 @@ class Application(tk.Frame):
         self.create_widgets()
     
     def create_widgets(self):
+        """
+        Prompts whether to change preset values (spike 233, sample weight err, spike wt err, 230/232i, 230/232i err)
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
-        
+           
         tk.Label(dialog_frame, text = "Would you like to change preset values?", font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'w')
         
         self.CheckVar_preset_yes = tk.IntVar()
@@ -57,11 +64,15 @@ class Application(tk.Frame):
         self.CheckVar_preset_no.set(0)
         self.option_preset_no = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_preset_no, command = self.method_used).grid(row = 0, column = 2, sticky = 'w')
 
-    def method_used(self):    
+    def method_used(self):
+        """
+        Prompts whether U run on SEM or Cups configuration
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #U method used
         tk.Label(dialog_frame, text = "Check which method used for U run: ", font = ('TkDefaultFont', 10) ).grid(row = 0, column = 0, sticky = 'w')
         self.CheckVar_sem_U = tk.IntVar()
         self.CheckVar_sem_U.set(0)
@@ -76,7 +87,9 @@ class Application(tk.Frame):
     """
         
     def upload_sem(self):
-        
+        """
+        Runs functions for calculating SEM measurements
+        """
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
@@ -84,20 +97,26 @@ class Application(tk.Frame):
         
         
     def parameter_input(self):
+        """
+        Creates manual entry windows for spike and AS
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #spike used
         tk.Label(dialog_frame, text = "Enter spike information (choose from: DIII-B, DIII-A, 1I, 1H):  ", font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'w')
         self.spikeinput = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.spikeinput.grid(row = 0, column = 1, sticky = 'w')
         self.spikeinput.focus_set()
         
-        tk.Label(dialog_frame, text = "Enter abundant sensitivity for 237U-238U for U run: ", font = ('TkDefaultFont', 10)).grid(row = 1, column = 0, sticky = 'w')
+        #U abundance sensitivity
+        tk.Label(dialog_frame, text = "Enter abundance sensitivity for 237U-238U for U run: ", font = ('TkDefaultFont', 10)).grid(row = 1, column = 0, sticky = 'w')
         self.AS_U_input = tk.Entry(dialog_frame, background = 'white', width= 12)
         self.AS_U_input.grid(row = 1, column = 1, sticky = 'w')
         self.AS_U_input.focus_set()
         
+        #AS option for Th
         tk.Label(dialog_frame, text = "Is the AS the same for Th run? ", font = ('TkDefaultFont', 10) ).grid(row = 2, column = 0, sticky = 'w')
         
         self.CheckVar_AS_Th_yes = tk.IntVar()
@@ -109,30 +128,37 @@ class Application(tk.Frame):
         self.checkbutton_AS_Th_no = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_AS_Th_no, command = self.AS_Th_no).grid(row = 2, column = 1, sticky = 'e')
         
     def AS_Th_yes(self):
-        
+        """
+        Creates manual entry windows for sample weight, spike weight, sample ID, and row number for age spreadsheet
+        """
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #sample weight
         tk.Label(dialog_frame, text = "Enter sample weight (g): ", font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'w')
         self.sample_wt = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.sample_wt.grid(row = 0, column = 1, sticky = 'w')
         self.sample_wt.focus_set()
         
+        #spike weight
         tk.Label(dialog_frame, text = "Enter spike weight (g): ", font = ('TkDefaultFont', 10)).grid(row = 1, column = 0, sticky = 'w')
         self.spike_wt = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.spike_wt.grid(row = 1, column = 1, sticky = 'w')
         self.spike_wt.focus_set()
         
+        #sample ID
         tk.Label(dialog_frame, text = "Enter sample ID: ", font = ('TkDefaultFont', 10)).grid(row = 2, column = 0, sticky = 'w')
         self.sample_ID = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.sample_ID.grid(row = 2, column = 1, sticky = 'w')
         self.sample_ID.focus_set()
         
+        #row number for export on Excel age spreadsheet
         tk.Label(dialog_frame, text = "Enter row # for age spreadsheet (starting at 6): ", font = ('TkDefaultFont', 10)).grid(row = 3, column = 0, sticky = 'w')
         self.row_age = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.row_age.grid(row = 3, column = 1, sticky = 'w')
         self.row_age.focus_set()
         
+        #option for altering Th file
         tk.Label(dialog_frame, text = "Would you like to alter your Th file? ", font = ('TkDefaultFont', 10)).grid(row = 4, column = 0, sticky = 'e')
         
         self.CheckVar_Th_yes_sem = tk.IntVar()
@@ -144,37 +170,46 @@ class Application(tk.Frame):
         self.option_th_no_sem = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_Th_no_sem, command = self.Th_no_sem).grid(row = 4, column = 1, sticky = 'e')
     
     def AS_Th_no(self):
+        """
+        Creates manual entry windows for Th AS, sample weight, spike weight, sample ID, and row # for age spreadsheet
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
         self.AS_Th_no = 1
         
-        tk.Label(dialog_frame, text = "Enter abundant sensitivity for 237U-238U for Th run: ",  font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'w')
+        #abundance sensitivity for Th
+        tk.Label(dialog_frame, text = "Enter abundance sensitivity for 237U-238U for Th run: ",  font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'w')
         self.AS_Th_input = tk.Entry(dialog_frame, background = 'white', width= 12)
         self.AS_Th_input.grid(row = 0, column = 1, sticky = 'w')
         self.AS_Th_input.focus_set()
         
+        #sample weight
         tk.Label(dialog_frame, text = "Enter sample weight (g): ", font = ('TkDefaultFont', 10)).grid(row = 1, column = 0, sticky = 'w')
         self.sample_wt = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.sample_wt.grid(row = 1, column = 1, sticky = 'w')
         self.sample_wt.focus_set()
         
+        #spike weight
         tk.Label(dialog_frame, text = "Enter spike weight (g): ", font = ('TkDefaultFont', 10)).grid(row = 2, column = 0, sticky = 'w')
         self.spike_wt = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.spike_wt.grid(row = 2, column = 1, sticky = 'w')
         self.spike_wt.focus_set()
         
+        #sample ID
         tk.Label(dialog_frame, text = "Enter sample ID: ", font = ('TkDefaultFont', 10)).grid(row = 3, column = 0, sticky = 'w')
         self.sample_ID = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.sample_ID.grid(row = 3, column = 1, sticky = 'w')
         self.sample_ID.focus_set()
         
+        #row number for export on Excel age spreadsheet
         tk.Label(dialog_frame, text = "Enter row # for age spreadsheet (starting at 6): ", font = ('TkDefaultFont', 10)).grid(row = 4, column = 0, sticky = 'w')
         self.row_age = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.row_age.grid(row = 4, column = 1, sticky = 'w')
         self.row_age.focus_set()
         
+        #option for altering Th file
         tk.Label(dialog_frame, text = "Would you like to alter your Th file? ", font = ('TkDefaultFont', 10)).grid(row = 5, column = 0, sticky = 'e')
         
         self.CheckVar_Th_yes_sem = tk.IntVar()
@@ -186,27 +221,34 @@ class Application(tk.Frame):
         self.option_th_no_sem = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_Th_no_sem, command = self.Th_no_sem).grid(row = 5, column = 1, sticky = 'e')
     
     def Th_yes_sem(self):
+        """
+        Changing Th file by specifying which cycle to end on, uploading altered Th files
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #altering Th file
         tk.Label(dialog_frame, text = 'Enter last cycle # to be analyzed: ', font = ('TkDefaultFont', 10) ).grid(row = 0, column = 0, sticky = 'e')
         self.rowinput_Th = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.rowinput_Th.grid(row = 0, column = 1, sticky = 'w')
         self.rowinput_Th.focus_set()
         
+        #uploading Th file
         self.Th_checkbutton = tk.Button(dialog_frame, text = "Upload Th file", font = ('TkDefaultFont', 10), command = self.file_Th_upload_option).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_Th_upload = tk.IntVar()
         self.CheckVar_Th_upload.set(0)
         self.Th_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_Th_upload).grid(row = 1, column = 1, sticky = 'w')
         
+        #uploading Th wash file
         self.Th_wash_checkbutton = tk.Button(dialog_frame, text = "Upload Th wash file", font = ('TkDefaultFont', 10), command = self.file_Thwash_upload).grid(row = 2, column = 0, sticky = 'e')
         
         self.CheckVar_Thwash_upload = tk.IntVar()
         self.CheckVar_Thwash_upload.set(0)
         self.Thwash_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_Thwash_upload).grid(row = 2, column = 1, sticky = 'w')
         
+        #option for altering U file
         tk.Label(dialog_frame, text = "Would you like to alter your U file? ", font = ('TkDefaultFont', 10)).grid(row = 3, column = 0, sticky = 'w')
         
         self.CheckVar_U_yes_sem = tk.IntVar()
@@ -218,22 +260,27 @@ class Application(tk.Frame):
         self.option_u_no_sem = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_U_no_sem, command = self.U_no_sem).grid(row = 3, column = 1, sticky = 'e')
         
     def Th_no_sem(self):
-        
+        """
+        Uploading unaltered Th files
+        """
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #uploading Th file
         self.Th_checkbutton = tk.Button(dialog_frame, text = "Upload Th file", font = ('TkDefaultFont', 10), command = self.file_Th_upload).grid(row = 0, column = 0, sticky = 'e')
         
         self.CheckVar_Th_upload = tk.IntVar()
         self.CheckVar_Th_upload.set(0)
         self.Th_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_Th_upload).grid(row = 0, column = 1, sticky = 'w')
         
+        #uploading Th wash file
         self.Th_wash_checkbutton = tk.Button(dialog_frame, text = "Upload Th wash file", font = ('TkDefaultFont', 10), command = self.file_Thwash_upload).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_Thwash_upload = tk.IntVar()
         self.CheckVar_Thwash_upload.set(0)
         self.Thwash_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_Thwash_upload).grid(row = 1, column = 1, sticky = 'w')
         
+        #option of altering U file
         tk.Label(dialog_frame, text = "Would you like to alter your U file? ", font = ('TkDefaultFont', 10)).grid(row = 2, column = 0, sticky = 'w')
         
         self.CheckVar_U_yes_sem = tk.IntVar()
@@ -245,21 +292,27 @@ class Application(tk.Frame):
         self.option_u_no_sem = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_U_no_sem, command = self.U_no_sem).grid(row = 2, column = 2, sticky = 'w')
        
     def U_yes_sem(self):
+        """
+        Changing U file by specifying which cycle to end on, uploading altered U files
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #altering U file
         tk.Label(dialog_frame, text = 'Enter last cycle # to be analyzed: ' , font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'e')
         self.rowinput_U = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.rowinput_U.grid(row = 0, column = 1, sticky = 'w')
         self.rowinput_U.focus_set()
         
+        #uploading U file
         self.U_checkbutton = tk.Button(dialog_frame, text = "Upload U file", font = ('TkDefaultFont', 10), command = self.file_U_upload_option).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_U_upload = tk.IntVar()
         self.CheckVar_U_upload.set(0)
         self.U_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_U_upload).grid(row = 1, column = 1, sticky = 'w')
         
+        #uploading U wash file
         self.U_wash_checkbutton = tk.Button(dialog_frame, text = "Upload U wash file", font = ('TkDefaultFont', 10), command = self.file_Uwash_upload).grid(row = 2, column = 0, sticky = 'e')
         
         self.CheckVar_Uwash_upload = tk.IntVar()
@@ -268,33 +321,42 @@ class Application(tk.Frame):
         
         tk.Label(dialog_frame, text = 'Additional uploads:', font = ('TkDefaultFont', 10)).grid(row = 3, column = 0, sticky = 'e')
         
+        #uploading chemblank file
         self.chemblank_checkbutton = tk.Button(dialog_frame, text = "Upload chemblank excel file", font = ('TkDefaultFont', 10), command = self.file_chemblank_upload).grid(row = 4, column = 0, sticky = 'e')
         
         self.CheckVar_chemblank_upload = tk.IntVar()
         self.CheckVar_chemblank_upload.set(0)
         self.chemblank_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_chemblank_upload).grid(row = 4, column = 1, sticky = 'w')
         
+        #uploading age spreadsheet
         self.file_checkbutton = tk.Button(dialog_frame, text = "Upload age excel file", font = ('TkDefaultFont', 10), command = self.file_upload_export).grid(row = 5, column = 0, sticky = 'e')
         
         self.CheckVar_file_export = tk.IntVar()
         self.CheckVar_file_export.set(0)
         self.file_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_file_export).grid(row = 5, column = 1, sticky = 'w')
         
+        #run SEM age calculation
         self.age = tk.Button(dialog_frame, text = 'Calculate Age', font = ('TkDefaultFont', 10), default = 'active', command = self.sem_command).grid(row = 6, column = 0)
         
+        #quit
         self.quit = tk.Button(dialog_frame, text="QUIT", command= root.destroy).grid(row = 6, column = 1)
        
-    def U_no_sem(self):     
+    def U_no_sem(self):
+        """
+        Uploading unaltered U files
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #uploading U file
         self.U_checkbutton = tk.Button(dialog_frame, text = "Upload U file", font = ('TkDefaultFont', 10), command = self.file_U_upload).grid(row = 0, column = 0, sticky = 'e')
         
         self.CheckVar_U_upload = tk.IntVar()
         self.CheckVar_U_upload.set(0)
         self.U_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_U_upload).grid(row = 0, column = 1, sticky = 'w')
         
+        #uploading U wash file
         self.U_wash_checkbutton = tk.Button(dialog_frame, text = "Upload U wash file", font = ('TkDefaultFont', 10), command = self.file_Uwash_upload).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_Uwash_upload = tk.IntVar()
@@ -303,25 +365,33 @@ class Application(tk.Frame):
         
         tk.Label(dialog_frame, text = 'Additional uploads:', font = ('TkDefaultFont', 10)).grid(row = 2, column = 0, sticky = 'e')
         
+        #uploading chemblank file
         self.chemblank_checkbutton = tk.Button(dialog_frame, text = "Upload chemblank excel file", font = ('TkDefaultFont', 10), command = self.file_chemblank_upload).grid(row = 3, column = 0, sticky = 'e')
         
         self.CheckVar_chemblank_upload = tk.IntVar()
         self.CheckVar_chemblank_upload.set(0)
         self.chemblank_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_chemblank_upload).grid(row = 3, column = 1, sticky = 'w')
         
+        #uploading age spreadsheet
         self.file_checkbutton = tk.Button(dialog_frame, text = "Upload age excel file", font = ('TkDefaultFont', 10), command = self.file_upload_export).grid(row = 4, column = 0, sticky = 'e')
         
         self.CheckVar_file_export = tk.IntVar()
         self.CheckVar_file_export.set(0)
         self.file_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_file_export).grid(row = 4, column = 1, sticky = 'w')
         
+        #run SEM age calculation
         self.age = tk.Button(dialog_frame, text = 'Calculate Age', default = 'active', font = ('TkDefaultFont', 10), command = self.sem_command).grid(row = 5, column = 0)
         
+        #quit
         self.quit = tk.Button(dialog_frame, text="QUIT", font = ('TkDefaultFont', 10), command= self.quit_program).grid(row = 5, column = 1)  
     
     
     def sem_command(self):
+        """
+        Runs functions for reducing SEM data
+        """
         
+        #preset values (altered or unaltered)
         spike_conc_three = preset_values[0]
         spike_conc_nine = preset_values[1]
         sample_wt_err = preset_values[2]
@@ -329,17 +399,21 @@ class Application(tk.Frame):
         zerotwo = preset_values[4]
         zerotwo_err = preset_values[5]
         
+        #AS for U run
         AS_U = self.AS_U_input.get()
         
+        #AS for Th run: either input value or same as AS for U run
         if self.AS_Th_no == 1:
             AS_Th = self.AS_Th_input.get()
         else: 
             AS_Th = AS_U
         
+        #initiate SEM calculation
         sem_calc = Application_sem(self.spikeinput.get(), AS_U, AS_Th, self.sample_wt.get(), self.spike_wt.get(), self.sample_ID.get(), self.row_age.get(), 
                         self.filename_Th, self.filename_Thwash, self.filename_U, self.filename_Uwash, 
                         self.chem_lst, self.file_export, 
                         sample_wt_err, spike_wt_err, spike_conc_three, spike_conc_nine, zerotwo, zerotwo_err)
+        #run SEM calculation
         sem_calc.age_calculate_sem()
         
     """
@@ -347,6 +421,9 @@ class Application(tk.Frame):
     """
         
     def cups_command_U(self):
+        """
+        Prompts whether Th run on SEM or Cups configuration
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
@@ -365,40 +442,50 @@ class Application(tk.Frame):
     Th on SEM
     """
     def sem_command_Th(self):
+        """
+        Creates manual entry windows for spike, AS, sample weight, spike weight, sample ID, and row number for Excel age spreadsheet
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #spike used
         tk.Label(dialog_frame, text = "Enter spike information (choose from: DIII-B, DIII-A, 1I, 1H):  ", font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'w')
         self.spikeinput = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.spikeinput.grid(row = 0, column = 1, sticky = 'w')
         self.spikeinput.focus_set()
         
-        tk.Label(dialog_frame, text = "Enter abundant sensitivity for 237U-238U for Th run: ", font = ('TkDefaultFont', 10)).grid(row = 1, column = 0, sticky = 'w')
+        #abundance sensitivity for Th run
+        tk.Label(dialog_frame, text = "Enter abundance sensitivity for 237U-238U for Th run: ", font = ('TkDefaultFont', 10)).grid(row = 1, column = 0, sticky = 'w')
         self.AS_input_Th = tk.Entry(dialog_frame, background = 'white', width= 12)
         self.AS_input_Th.grid(row = 1, column = 1, sticky = 'w')
         self.AS_input_Th.focus_set()
         
+        #sample weight
         tk.Label(dialog_frame, text = "Enter sample weight (g): ", font = ('TkDefaultFont', 10)).grid(row = 2, column = 0, sticky = 'w')
         self.sample_wt = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.sample_wt.grid(row = 2, column = 1, sticky = 'w')
         self.sample_wt.focus_set()
         
+        #spike weight
         tk.Label(dialog_frame, text = "Enter spike weight (g): ", font = ('TkDefaultFont', 10)).grid(row = 3, column = 0, sticky = 'w')
         self.spike_wt = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.spike_wt.grid(row = 3, column = 1, sticky = 'w')
         self.spike_wt.focus_set()
         
+        #sample ID
         tk.Label(dialog_frame, text = "Enter sample ID: ", font = ('TkDefaultFont', 10) ).grid(row = 4, column = 0, sticky = 'w')
         self.sample_ID = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.sample_ID.grid(row = 4, column = 1, sticky = 'w')
         self.sample_ID.focus_set()
         
+        #row number for export on Excel age spreadsheet
         tk.Label(dialog_frame, text = "Enter row # for age spreadsheet (starting at 6): ", font = ('TkDefaultFont', 10)).grid(row = 5, column = 0, sticky = 'w')
         self.row_age = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.row_age.grid(row = 5, column = 1, sticky = 'w')
         self.row_age.focus_set()
         
+        #option of altering unspiked standard file
         tk.Label(dialog_frame, text = "Would you like to alter your unspiked standard file? ", font = ('TkDefaultFont', 10)).grid(row = 6, column = 0, sticky = 'e')
         
         self.CheckVar_unspiked_yes_semcups = tk.IntVar()
@@ -410,37 +497,46 @@ class Application(tk.Frame):
         self.option_unspiked_no_semcups = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_unspiked_no_semcups, command = self.unspiked_no_semcups).grid(row = 6, column = 1, sticky = 'e')
    
     def unspiked_yes_semcups(self):
+        """
+        Changing unspiked standard file by specifying which cycle to end on, uploading altered unspiked files. Creates manual entry windows for spiked standard values.
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #altering unspiked standard file
         tk.Label(dialog_frame, text = 'Enter last cycle # to be analyzed: ', font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'e')
         self.rowinput_unspiked = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.rowinput_unspiked.grid(row = 0, column = 1, sticky = 'w')
         self.rowinput_unspiked.focus_set()
         
+        #uploading unspiked standard file
         self.unspiked_checkbutton = tk.Button(dialog_frame, text = "Upload unspiked standard file", font = ('TkDefaultFont', 10), command = self.file_unspiked_upload_option).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_unspiked_upload = tk.IntVar()
         self.CheckVar_unspiked_upload.set(0)
         self.unspiked_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_unspiked_upload).grid(row = 1, column = 1, sticky = 'w')
         
+        #uploading unspiked standard wash file
         self.unspikedwash_checkbutton = tk.Button(dialog_frame, text = "Upload unspiked standard wash file", font = ('TkDefaultFont', 10), command = self.file_unspikedwash_upload).grid(row = 2, column = 0, sticky = 'e')
         
         self.CheckVar_unspikedwash_upload = tk.IntVar()
         self.CheckVar_unspikedwash_upload.set(0)
         self.unspikedwash_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_unspikedwash_upload).grid(row = 2, column = 1, sticky = 'w')
         
+        #234/238 ppm spiked standard
         tk.Label(dialog_frame, text = "Enter your spiked standard 234/238 value in ppm: ", font = ('TkDefaultFont', 10)).grid(row = 3, column = 0, sticky = 'e')
         self.spiked = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.spiked.grid(row =3, column = 1, sticky = 'w')
         self.spiked.focus_set()
         
+        #234/238 ppm error spiked standard
         tk.Label(dialog_frame, text = "Enter your spiked standard 234/238 error value in ppm: ", font = ('TkDefaultFont', 10)).grid(row = 4, column = 0, sticky = 'e')
         self.spiked_err = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.spiked_err.grid(row = 4, column = 1, sticky = 'w')
         self.spiked_err.focus_set()
         
+        #option of altering Th file
         tk.Label(dialog_frame, text = "Would you like to alter your Th file? ", font = ('TkDefaultFont', 10)).grid(row = 5, column = 0, sticky = 'e')
         
         self.CheckVar_Th_yes_semcups = tk.IntVar()
@@ -452,32 +548,40 @@ class Application(tk.Frame):
         self.option_Th_no_semcups = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_Th_no_semcups, command = self.Th_no_semcups).grid(row = 5, column = 1, sticky = 'e')
    
     def unspiked_no_semcups(self):
+        """
+        Uploading unaltered unspiked standard files. Creates manual entry windows for spiked standard values.
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #uploading unspiked standard file
         self.unspiked_checkbutton = tk.Button(dialog_frame, text = "Upload unspiked standard file", font = ('TkDefaultFont', 10), command = self.file_unspiked_upload).grid(row = 0, column = 0, sticky = 'e')
         
         self.CheckVar_unspiked_upload = tk.IntVar()
         self.CheckVar_unspiked_upload.set(0)
         self.unspiked_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10),  variable = self.CheckVar_unspiked_upload).grid(row = 0, column = 1, sticky = 'w')
         
+        #uploading unspiked standard wash file
         self.unspikedwash_checkbutton = tk.Button(dialog_frame, text = "Upload unspiked standard wash file", font = ('TkDefaultFont', 10), command = self.file_unspikedwash_upload).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_unspikedwash_upload = tk.IntVar()
         self.CheckVar_unspikedwash_upload.set(0)
         self.unspikedwash_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_unspikedwash_upload).grid(row = 1, column = 1, sticky = 'w')
         
+        #234/238 ppm spiked standard 
         tk.Label(dialog_frame, text = "Enter your spiked standard 234/238 value in ppm: ", font = ('TkDefaultFont', 10)).grid(row = 2, column = 0, sticky = 'e')
         self.spiked = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.spiked.grid(row = 2, column = 1, sticky = 'w')
         self.spiked.focus_set()
         
+        #234/238 ppm error spiked standard
         tk.Label(dialog_frame, text = "Enter your spiked standard 234/238 error value in ppm: ", font = ('TkDefaultFont', 10)).grid(row = 3, column = 0, sticky = 'e')
         self.spiked_err = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.spiked_err.grid(row = 3, column = 1, sticky = 'w')
         self.spiked_err.focus_set()
         
+        #option of altering Th file
         tk.Label(dialog_frame, text = "Would you like to alter your Th file? ", font = ('TkDefaultFont', 10)).grid(row = 4, column = 0, sticky = 'e')
         
         self.CheckVar_Th_yes_semcups = tk.IntVar()
@@ -489,27 +593,34 @@ class Application(tk.Frame):
         self.option_Th_no_semcups = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_Th_no_semcups, command = self.Th_no_semcups).grid(row = 4, column = 1, sticky = 'e')
    
     def Th_yes_semcups(self):
+        """
+        Changing Th file by specifying which cycle to end on, uploading altered Th files. 
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #altering Th file
         tk.Label(dialog_frame, text = 'Enter last cycle # to be analyzed: ', font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'e')
         self.rowinput_Th = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.rowinput_Th.grid(row = 0, column = 1, sticky = 'w')
         self.rowinput_Th.focus_set()
         
+        #uploading Th file
         self.Th_checkbutton = tk.Button(dialog_frame, text = "Upload Th file", font = ('TkDefaultFont', 10), command = self.file_Th_upload_option).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_Th_upload = tk.IntVar()
         self.CheckVar_Th_upload.set(0)
         self.Th_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_Th_upload).grid(row = 1, column = 1, sticky = 'w')
         
+        #uploading Th wash file
         self.Thwash_checkbutton = tk.Button(dialog_frame, text = "Upload Th wash file", font = ('TkDefaultFont', 10), command = self.file_Thwash_upload).grid(row = 2, column = 0, sticky = 'e')
         
         self.CheckVar_Thwash_upload = tk.IntVar()
         self.CheckVar_Thwash_upload.set(0)
         self.Thwash_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_Thwash_upload).grid(row = 2, column = 1, sticky = 'w')
         
+        #option of altering U file
         tk.Label(dialog_frame, text = "Would you like to alter your U file? ", font = ('TkDefaultFont', 10)).grid(row = 3, column = 0, sticky = 'w')
         
         self.CheckVar_U_yes_semcups = tk.IntVar()
@@ -521,22 +632,28 @@ class Application(tk.Frame):
         self.option_U_no_semcups = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_U_no_semcups, command = self.U_no_semcups).grid(row = 3, column = 1, sticky = 'e')
     
     def Th_no_semcups(self):
+        """
+        Uploading unaltered Th files
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #uploading Th file
         self.Th_checkbutton = tk.Button(dialog_frame, text = "Upload Th file", font = ('TkDefaultFont', 10), command = self.file_Th_upload).grid(row = 0, column = 0, sticky = 'e')
         
         self.CheckVar_Th_upload = tk.IntVar()
         self.CheckVar_Th_upload.set(0)
         self.Th_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_Th_upload).grid(row = 0, column = 1, sticky = 'w')
         
+        #uploading Th wash file
         self.Thwash_checkbutton = tk.Button(dialog_frame, text = "Upload Th wash file", font = ('TkDefaultFont', 10), command = self.file_Thwash_upload).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_Thwash_upload = tk.IntVar()
         self.CheckVar_Thwash_upload.set(0)
         self.Thwash_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_Thwash_upload).grid(row = 1, column = 1, sticky = 'w')
         
+        #option of altering U file
         tk.Label(dialog_frame, text = "Would you like to alter your U file? ", font = ('TkDefaultFont', 10)).grid(row = 2, column = 0, sticky = 'w')
         
         self.CheckVar_U_yes_semcups = tk.IntVar()
@@ -548,28 +665,34 @@ class Application(tk.Frame):
         self.option_U_no_semcups = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_U_no_semcups, command = self.U_no_semcups).grid(row = 2, column = 2, sticky = 'w')
         
     def U_yes_semcups(self):
+        """
+        Changing U file by specifying which cycle to end on, uploading altered U files. 
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
-        
+        #altering U file
         tk.Label(dialog_frame, text = 'Enter last cycle # to be analyzed: ', font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'e')
         self.rowinput_U = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.rowinput_U.grid(row = 0, column = 1, sticky = 'w')
         self.rowinput_U.focus_set()
         
+        #uploading U file
         self.U_checkbutton = tk.Button(dialog_frame, text = "Upload U file", font = ('TkDefaultFont', 10), command = self.file_U_upload_option).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_U_upload = tk.IntVar()
         self.CheckVar_U_upload.set(0)
         self.U_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_U_upload).grid(row = 1, column = 1, sticky = 'w')
         
+        #uploading U wash file
         self.Uwash_checkbutton = tk.Button(dialog_frame, text = "Upload U wash file", font = ('TkDefaultFont', 10), command = self.file_Uwash_upload).grid(row = 2, column = 0, sticky = 'e')
         
         self.CheckVar_Uwash_upload = tk.IntVar()
         self.CheckVar_Uwash_upload.set(0)
         self.Uwash_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_Uwash_upload).grid(row = 2, column = 1, sticky = 'w')
         
+        #U wash method used
         tk.Label(dialog_frame, text = "U wash run on: ", font = ('TkDefaultFont', 10)).grid(row = 3, column = 0, sticky = 'w')
         
         self.CheckVar_Uwash_sem = tk.IntVar()
@@ -580,42 +703,51 @@ class Application(tk.Frame):
         self.CheckVar_Uwash_cups.set(0)
         self.Uwash_cups_checkbutton= tk.Checkbutton(dialog_frame, text = "CUPS", font = ('TkDefaultFont', 10), variable = self.CheckVar_Uwash_cups, command = self.Uwash_cups).grid(row = 3, column = 2, sticky = 'w')
         
-        
         tk.Label(dialog_frame, text = 'Additional uploads:', font = ('TkDefaultFont', 10)).grid(row = 4, column = 0, sticky = 'e')
         
+        #uploading chemblank file
         self.chemblank_checkbutton = tk.Button(dialog_frame, text = "Upload chemblank excel file", font = ('TkDefaultFont', 10), command = self.file_chemblank_upload).grid(row = 5, column = 0, sticky = 'e')
         
         self.CheckVar_chemblank_upload = tk.IntVar()
         self.CheckVar_chemblank_upload.set(0)
         self.chemblank_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_chemblank_upload).grid(row = 5, column = 1, sticky = 'w')
         
+        #uploading age spreadsheet
         self.file_checkbutton = tk.Button(dialog_frame, text = "Upload age excel file", font = ('TkDefaultFont', 10), command = self.file_upload_export).grid(row = 6, column = 0, sticky = 'e')
         
         self.CheckVar_file_export = tk.IntVar()
         self.CheckVar_file_export.set(0)
         self.file_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_file_export).grid(row = 6, column = 1, sticky = 'w')
         
+        #run age calculation for U on Cups and Th on SEM
         self.age = tk.Button(dialog_frame, text = 'Calculate Age', font = ('TkDefaultFont', 10), default = 'active', command = self.semcups_command).grid(row = 7, column = 0)
         
+        #quit
         self.quit = tk.Button(dialog_frame, text="QUIT", font = ('TkDefaultFont', 10), command= self.quit_program).grid(row = 7, column = 1)  
         
     def U_no_semcups(self):
+        """
+        Uploading unaltered U files
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
 
+        #uploading U file
         self.U_checkbutton = tk.Button(dialog_frame, text = "Upload U file", font = ('TkDefaultFont', 10), command = self.file_U_upload).grid(row = 0, column = 0, sticky = 'e')
         
         self.CheckVar_U_upload = tk.IntVar()
         self.CheckVar_U_upload.set(0)
         self.U_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_U_upload).grid(row = 0, column = 1, sticky = 'w')
         
+        #uploading U wash file
         self.Uwash_checkbutton = tk.Button(dialog_frame, text = "Upload U wash file", font = ('TkDefaultFont', 10), command = self.file_Uwash_upload).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_Uwash_upload = tk.IntVar()
         self.CheckVar_Uwash_upload.set(0)
         self.Uwash_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_Uwash_upload).grid(row = 1, column = 1, sticky = 'w')
         
+        #U wash method used
         tk.Label(dialog_frame, text = "U wash run on: ", font = ('TkDefaultFont', 10)).grid(row = 2, column = 0, sticky = 'w')
         
         self.CheckVar_Uwash_sem = tk.IntVar()
@@ -628,24 +760,32 @@ class Application(tk.Frame):
         
         tk.Label(dialog_frame, text = 'Additional uploads:', font = ('TkDefaultFont', 10)).grid(row = 3, column = 0, sticky = 'e')
         
+        #uploading chemblank file
         self.chemblank_checkbutton = tk.Button(dialog_frame, text = "Upload chemblank excel file", font = ('TkDefaultFont', 10), command = self.file_chemblank_upload).grid(row = 4, column = 0, sticky = 'e')
         
         self.CheckVar_chemblank_upload = tk.IntVar()
         self.CheckVar_chemblank_upload.set(0)
         self.chemblank_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_chemblank_upload).grid(row = 4, column = 1, sticky = 'w')
         
+        #uploading age spreadsheet
         self.file_checkbutton = tk.Button(dialog_frame, text = "Upload age excel file", font = ('TkDefaultFont', 10), command = self.file_upload_export).grid(row = 5, column = 0, sticky = 'e')
         
         self.CheckVar_file_export = tk.IntVar()
         self.CheckVar_file_export.set(0)
         self.file_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_file_export).grid(row = 5, column = 1, sticky = 'w')
         
+        #run age calculation for U on Cups and Th on SEM
         self.age = tk.Button(dialog_frame, text = 'Calculate Age', font = ('TkDefaultFont', 10), default = 'active', command = self.semcups_command).grid(row = 6, column = 0)
         
+        #quit
         self.quit = tk.Button(dialog_frame, text="QUIT", font = ('TkDefaultFont', 10), command= self.quit_program).grid(row = 6, column = 2)
 
     def semcups_command(self):
+        """
+        Runs functions for reducing U-Cups and Th-SEM data
+        """
         
+        #preset values (altered or unaltered)
         spike_conc_three = preset_values[0]
         spike_conc_nine = preset_values[1]
         sample_wt_err = preset_values[2]
@@ -653,48 +793,58 @@ class Application(tk.Frame):
         zerotwo = preset_values[4]
         zerotwo_err = preset_values[5]
         
+        #initiates U-Cups and Th-SEM age calculation
         semcups_calc = Application_semcups(self.spikeinput.get(), self.AS_input_Th.get(), self.sample_wt.get(), self.spike_wt.get(), self.sample_ID.get(), self.row_age.get(),
                                             self.spiked.get(), self.spiked_err.get(), self.filename_unspiked, self.filename_unspikedwash, 
                                             self.filename_Th, self.filename_Thwash, self.filename_U, self.filename_Uwash, 
                                             self.chem_lst, self.file_export,
                                             sample_wt_err, spike_wt_err, spike_conc_three, spike_conc_nine, zerotwo, zerotwo_err,
                                             self.Uwash)
-        
+        #runs U-Cups and Th-SEM age calculation
         semcups_calc.age_calculate_semcups()
         
     """
     Th on Cups
     """    
     def cups_command_Th(self):
+        """
+        Creates manual entry windows for spike, sample weight, spike weight, sample ID, and row number for age spreadsheet
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #spike used
         tk.Label(dialog_frame, text = "Enter spike information (choose from: DIII-B, DIII-A, 1I, 1H):  ", font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'w')
         self.spikeinput = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.spikeinput.grid(row = 0, column = 1, sticky = 'w')
         self.spikeinput.focus_set()
         
+        #sample weight
         tk.Label(dialog_frame, text = "Enter sample weight (g): ", font = ('TkDefaultFont', 10)).grid(row = 1, column = 0, sticky = 'w')
         self.sample_wt = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.sample_wt.grid(row = 1, column = 1, sticky = 'w')
         self.sample_wt.focus_set()
         
+        #spike weight
         tk.Label(dialog_frame, text = "Enter spike weight (g): ", font = ('TkDefaultFont', 10)).grid(row = 2, column = 0, sticky = 'w')
         self.spike_wt = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.spike_wt.grid(row = 2, column = 1, sticky = 'w')
         self.spike_wt.focus_set()
         
+        #sample ID
         tk.Label(dialog_frame, text = "Enter sample ID: ", font = ('TkDefaultFont', 10)).grid(row = 3, column = 0, sticky = 'w')
         self.sample_ID = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.sample_ID.grid(row = 3, column = 1, sticky = 'w')
         self.sample_ID.focus_set()
         
+        #row number for Excel age spreadsheet
         tk.Label(dialog_frame, text = "Enter row # for age spreadsheet (starting at 6): ", font = ('TkDefaultFont', 10)).grid(row = 4, column = 0, sticky = 'w')
         self.row_age = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.row_age.grid(row = 4, column = 1, sticky = 'w')
         self.row_age.focus_set()
         
+        #option of altering unspiked standard file
         tk.Label(dialog_frame, text = "Would you like to alter your unspiked standard file? ", font = ('TkDefaultFont', 10)).grid(row = 5, column = 0, sticky = 'e')
         
         self.CheckVar_unspiked_yes_cups = tk.IntVar()
@@ -705,39 +855,47 @@ class Application(tk.Frame):
         self.CheckVar_unspiked_no_cups.set(0)
         self.option_unspiked_no_cups = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_unspiked_no_cups, command = self.unspiked_no_cups).grid(row = 5, column = 1, sticky = 'e')
     
-
     def unspiked_yes_cups(self):
+        """
+        Changing unspiked standard file by specifying which cycle to end on, uploading altered unspiked standard files. Creates manual entry windows for spiked standard values.
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #altering unspiked standard file
         tk.Label(dialog_frame, text = 'Enter last cycle # to be analyzed: ', font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'e')
         self.rowinput_unspiked = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.rowinput_unspiked.grid(row = 0, column = 1, sticky = 'w')
         self.rowinput_unspiked.focus_set()
         
+        #uploading unspiked standard file
         self.unspiked_checkbutton = tk.Button(dialog_frame, text = "Upload unspiked standard file", font = ('TkDefaultFont', 10), command = self.file_unspiked_upload_option).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_unspiked_upload = tk.IntVar()
         self.CheckVar_unspiked_upload.set(0)
         self.unspiked_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_unspiked_upload).grid(row = 1, column = 1, sticky = 'w')
         
+        #uploading unspiked standard wash file
         self.unspikedwash_checkbutton = tk.Button(dialog_frame, text = "Upload unspiked standard wash file", font = ('TkDefaultFont', 10), command = self.file_unspikedwash_upload).grid(row = 2, column = 0, sticky = 'e')
         
         self.CheckVar_unspikedwash_upload = tk.IntVar()
         self.CheckVar_unspikedwash_upload.set(0)
         self.unspikedwash_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_unspikedwash_upload).grid(row = 2, column = 1, sticky = 'w')
         
+        #234/238 ppm spiked standard
         tk.Label(dialog_frame, text = "Enter your spiked standard 234/238 value in ppm: ", font = ('TkDefaultFont', 10)).grid(row = 3, column = 0, sticky = 'e')
         self.spiked = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.spiked.grid(row = 3, column = 1, sticky = 'w')
         self.spiked.focus_set()
         
+        #234/238 ppm error spiked standard
         tk.Label(dialog_frame, text = "Enter your spiked standard 234/238 error value in ppm: ", font = ('TkDefaultFont', 10)).grid(row = 4, column = 0, sticky = 'e')
         self.spiked_err = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.spiked_err.grid(row = 4, column = 1, sticky = 'w')
         self.spiked_err.focus_set()
-              
+        
+        #option for altering Th file
         tk.Label(dialog_frame, text = "Would you like to alter your Th file? ", font = ('TkDefaultFont', 10)).grid(row = 5, column = 0, sticky = 'e')
         
         self.CheckVar_Th_yes_cups = tk.IntVar()
@@ -749,32 +907,40 @@ class Application(tk.Frame):
         self.option_Th_no_cups = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_Th_no_cups, command = self.Th_no_cups).grid(row = 5, column = 1, sticky = 'e')
    
     def unspiked_no_cups(self):
-        
+        """
+        Uploading unaltered unspiked standard file. Creates manual entry windows for spiked standard values.
+        """
+
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #uploading unspiked standard file
         self.unspiked_checkbutton = tk.Button(dialog_frame, text = "Upload unspiked standard file", font = ('TkDefaultFont', 10), command = self.file_unspiked_upload).grid(row = 0, column = 0, sticky = 'e')
         
         self.CheckVar_unspiked_upload = tk.IntVar()
         self.CheckVar_unspiked_upload.set(0)
         self.unspiked_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_unspiked_upload).grid(row = 0, column = 1, sticky = 'w')
         
+        #uploading unspiked standard wash file
         self.unspikedwash_checkbutton = tk.Button(dialog_frame, text = "Upload unspiked standard wash file", font = ('TkDefaultFont', 10), command = self.file_unspikedwash_upload).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_unspikedwash_upload = tk.IntVar()
         self.CheckVar_unspikedwash_upload.set(0)
         self.unspikedwash_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_unspikedwash_upload).grid(row = 1, column = 1, sticky = 'w')
         
+        #234/238 ppm spiked standard
         tk.Label(dialog_frame, text = "Enter your spiked standard 234/238 value in ppm: ", font = ('TkDefaultFont', 10)).grid(row = 2, column = 0, sticky = 'e')
         self.spiked = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.spiked.grid(row = 2, column = 1, sticky = 'w')
         self.spiked.focus_set()
         
+        #234/238 ppm error spiked standard
         tk.Label(dialog_frame, text = "Enter your spiked standard 234/238 error value in ppm: ", font = ('TkDefaultFont', 10)).grid(row = 3, column = 0, sticky = 'e')
         self.spiked_err = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.spiked_err.grid(row = 3, column = 1, sticky = 'w')
         self.spiked_err.focus_set()
         
+        #option of altering Th file
         tk.Label(dialog_frame, text = "Would you like to alter your Th file? ", font = ('TkDefaultFont', 10)).grid(row = 4, column = 0, sticky = 'e')
         
         self.CheckVar_Th_yes_cups = tk.IntVar()
@@ -786,26 +952,33 @@ class Application(tk.Frame):
         self.option_Th_no_cups = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_Th_no_cups, command = self.Th_no_cups).grid(row = 4, column = 1, sticky = 'e')
    
     def Th_yes_cups(self):
+        """
+        Changing Th file by specifying which cycle to end on, uploading Th files. 
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #altering Th file
         tk.Label(dialog_frame, text = 'Enter last cycle # to be analyzed: ', font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'w')
         self.rowinput_Th = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.rowinput_Th.grid(row = 0, column = 1, sticky = 'w')
         self.rowinput_Th.focus_set()
         
+        #uploading Th file
         self.Th_checkbutton = tk.Button(dialog_frame, text = "Upload Th file", font = ('TkDefaultFont', 10), command = self.file_Th_upload_option).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_Th_upload = tk.IntVar()
         self.CheckVar_Th_upload.set(0)
         self.Th_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_Th_upload).grid(row = 1, column = 1, sticky = 'w')
         
+        #uploading Th wash file
         self.Thwash_checkbutton = tk.Button(dialog_frame, text = "Upload Th wash file", font = ('TkDefaultFont', 10), command = self.file_Thwash_upload).grid(row = 2, column = 0, sticky = 'e')
         self.CheckVar_Thwash_upload = tk.IntVar()
         self.CheckVar_Thwash_upload.set(0)
         self.Thwash_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_Thwash_upload).grid(row = 2, column = 1, sticky = 'w')
         
+        #Th wash method used
         tk.Label(dialog_frame, text = "Th wash run on: ", font = ('TkDefaultFont', 10)).grid(row = 3, column = 0, sticky = 'e')
         
         self.CheckVar_Thwash_sem = tk.IntVar()
@@ -816,6 +989,7 @@ class Application(tk.Frame):
         self.CheckVar_Thwash_cups.set(0)
         self.Thwash_cups_checkbutton= tk.Checkbutton(dialog_frame, text = "CUPS", font = ('TkDefaultFont', 10), variable = self.CheckVar_Thwash_cups, command = self.Thwash_cups).grid(row = 3, column = 2, sticky = 'w')
         
+        #option of altering U file
         tk.Label(dialog_frame, text = "Would you like to alter your U file? ", font = ('TkDefaultFont', 10)).grid(row = 4, column = 0, sticky = 'w')
         
         self.CheckVar_U_yes_cups = tk.IntVar()
@@ -827,22 +1001,28 @@ class Application(tk.Frame):
         self.option_U_no_cups = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_U_no_cups, command = self.U_no_cups).grid(row = 4, column = 1, sticky = 'e')
         
     def Th_no_cups(self):
+        """
+        Uploading unaltered Th files
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
 
+        #uploading Th file
         self.Th_checkbutton = tk.Button(dialog_frame, text = "Upload Th file", font = ('TkDefaultFont', 10), command = self.file_Th_upload).grid(row = 0, column = 0, sticky = 'e')
         
         self.CheckVar_Th_upload = tk.IntVar()
         self.CheckVar_Th_upload.set(0)
         self.Th_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_Th_upload).grid(row = 0, column = 1, sticky = 'w')
         
+        #uploading Th wash file
         self.Thwash_checkbutton = tk.Button(dialog_frame, text = "Upload Th wash file", font = ('TkDefaultFont', 10), command = self.file_Thwash_upload).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_Thwash_upload = tk.IntVar()
         self.CheckVar_Thwash_upload.set(0)
         self.Thwash_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_Thwash_upload).grid(row = 1, column = 1, sticky = 'w')
         
+        #Th wash method used
         tk.Label(dialog_frame, text = "Th wash run on: ", font = ('TkDefaultFont', 10)).grid(row = 2, column = 0, sticky = 'e')
         
         self.CheckVar_Thwash_sem = tk.IntVar()
@@ -853,6 +1033,7 @@ class Application(tk.Frame):
         self.CheckVar_Thwash_cups.set(0)
         self.Thwash_cups_checkbutton= tk.Checkbutton(dialog_frame, text = "CUPS", font = ('TkDefaultFont', 10), variable = self.CheckVar_Thwash_cups, command = self.Thwash_cups).grid(row = 2, column = 2, sticky = 'w')
         
+        #option of altering U file
         tk.Label(dialog_frame, text = "Would you like to alter your U file? ", font = ('TkDefaultFont', 10)).grid(row = 3, column = 0, sticky = 'w')
         
         self.CheckVar_U_yes_cups = tk.IntVar()
@@ -864,27 +1045,34 @@ class Application(tk.Frame):
         self.option_U_no_cups = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_U_no_cups, command = self.U_no_cups).grid(row = 3, column = 2, sticky = 'w')
         
     def U_yes_cups(self):
+        """
+        Changing U file by specifying which cycle to end on, uploading U files. 
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #altering U file
         tk.Label(dialog_frame, text = 'Enter last cycle # to be analyzed: ', font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'e')
         self.rowinput_U = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.rowinput_U.grid(row = 0, column = 1, sticky = 'w')
         self.rowinput_U.focus_set()
         
+        #uploading U file
         self.U_checkbutton = tk.Button(dialog_frame, text = "Upload U file", font = ('TkDefaultFont', 10), command = self.file_U_upload_option).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_U_upload = tk.IntVar()
         self.CheckVar_U_upload.set(0)
         self.U_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_U_upload).grid(row = 1, column = 1, sticky = 'w')
         
+        #uploading U wash file
         self.Uwash_checkbutton = tk.Button(dialog_frame, text = "Upload U wash file", font = ('TkDefaultFont', 10), command = self.file_Uwash_upload).grid(row = 2, column = 0, sticky = 'e')
         
         self.CheckVar_Uwash_upload = tk.IntVar()
         self.CheckVar_Uwash_upload.set(0)
         self.Uwash_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_Uwash_upload).grid(row = 2, column = 1, sticky = 'w')
         
+        #U wash method used
         tk.Label(dialog_frame, text = "U wash run on: ", font = ('TkDefaultFont', 10)).grid(row = 3, column = 0, sticky = 'e')
         
         self.CheckVar_Uwash_sem = tk.IntVar()
@@ -897,39 +1085,49 @@ class Application(tk.Frame):
         
         tk.Label(dialog_frame, text = 'Additional uploads:', font = ('TkDefaultFont', 10)).grid(row = 4, column = 0, sticky = 'w')
         
+        #uploading chemblank file
         self.chemblank_checkbutton = tk.Button(dialog_frame, text = "Upload chemblank excel file", font = ('TkDefaultFont', 10), command = self.file_chemblank_upload).grid(row = 5, column = 0, sticky = 'e')
         
         self.CheckVar_chemblank_upload = tk.IntVar()
         self.CheckVar_chemblank_upload.set(0)
         self.chemblank_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_chemblank_upload).grid(row = 5, column = 1, sticky = 'w')
         
+        #uploading age spreadsheet
         self.file_checkbutton = tk.Button(dialog_frame, text = "Upload age excel file", font = ('TkDefaultFont', 10), command = self.file_upload_export).grid(row = 6, column = 0, sticky = 'e')
         
         self.CheckVar_file_export = tk.IntVar()
         self.CheckVar_file_export.set(0)
         self.file_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_file_export).grid(row = 6, column = 1, sticky = 'w')
         
+        #run Cups age calculation
         self.age = tk.Button(dialog_frame, text = 'Calculate Age', default = 'active', font = ('TkDefaultFont', 10), command = self.cups_command).grid(row = 7, column = 0)
         
+        #quit
         self.quit = tk.Button(dialog_frame, text="QUIT", font = ('TkDefaultFont', 10), command= self.quit_program).grid(row = 7, column = 1)  
            
     def U_no_cups(self):
+        """
+        Uploading unaltered U files
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
 
+        #uploading U file
         self.U_checkbutton = tk.Button(dialog_frame, text = "Upload U file", font = ('TkDefaultFont', 10), command = self.file_U_upload).grid(row = 0, column = 0, sticky = 'e')
         
         self.CheckVar_U_upload = tk.IntVar()
         self.CheckVar_U_upload.set(0)
         self.U_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_U_upload).grid(row = 0, column = 1, sticky = 'w')
         
+        #uploading U wash file
         self.Uwash_checkbutton = tk.Button(dialog_frame, text = "Upload U wash file", font = ('TkDefaultFont', 10), command = self.file_Uwash_upload).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_Uwash_upload = tk.IntVar()
         self.CheckVar_Uwash_upload.set(0)
         self.Uwash_upload_checkbutton = tk.Checkbutton(dialog_frame, text = "Uploaded", font = ('TkDefaultFont', 10), variable = self.CheckVar_Uwash_upload).grid(row = 1, column = 1, sticky = 'w')
         
+        #U wash method used
         tk.Label(dialog_frame, text = "U wash run on: ", font = ('TkDefaultFont', 10)).grid(row = 2, column = 0, sticky = 'e')
         
         self.CheckVar_Uwash_sem = tk.IntVar()
@@ -941,25 +1139,32 @@ class Application(tk.Frame):
         self.Uwash_cups_checkbutton= tk.Checkbutton(dialog_frame, text = "CUPS", font = ('TkDefaultFont', 10), variable = self.CheckVar_Uwash_cups, command = self.Uwash_cups).grid(row = 2, column = 2, sticky = 'w')
         
         tk.Label(dialog_frame, text = 'Additional uploads:', font = ('TkDefaultFont', 10)).grid(row = 3, column = 0, sticky = 'e')
-        
+       
+        #uploading chemblank file
         self.chemblank_checkbutton = tk.Button(dialog_frame, text = "Upload chemblank excel file", font = ('TkDefaultFont', 10), command = self.file_chemblank_upload).grid(row = 4, column = 0, sticky = 'e')
         
         self.CheckVar_chemblank_upload = tk.IntVar()
         self.CheckVar_chemblank_upload.set(0)
         self.chemblank_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_chemblank_upload).grid(row = 4, column = 1, sticky = 'w')
         
+        #uploading age spreadsheet
         self.file_checkbutton = tk.Button(dialog_frame, text = "Upload age excel file", font = ('TkDefaultFont', 10), command = self.file_upload_export).grid(row = 5, column = 0, sticky = 'e')
         
         self.CheckVar_file_export = tk.IntVar()
         self.CheckVar_file_export.set(0)
         self.file_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_file_export).grid(row = 5, column = 1, sticky = 'w')
         
+        #run Cups age calculation
         self.age = tk.Button(dialog_frame, text = 'Calculate Age', font = ('TkDefaultFont', 10), default = 'active', command = self.cups_command).grid(row = 6, column = 0)
         
+        #quit
         self.quit = tk.Button(dialog_frame, text="QUIT", font = ('TkDefaultFont', 10), command= self.quit_program).grid(row = 6, column = 1)
 
     def cups_command(self):
-        
+        """
+        Runs functions for reducing Cups data
+        """
+        #preset values (altered or unaltered)
         spike_conc_three = preset_values[0]
         spike_conc_nine = preset_values[1]
         sample_wt_err = preset_values[2]
@@ -967,12 +1172,14 @@ class Application(tk.Frame):
         zerotwo = preset_values[4]
         zerotwo_err = preset_values[5]
         
+        #initiate cups age calculation
         cups_calc = Application_cups(self.spikeinput.get(), self.sample_wt.get(), self.spike_wt.get(), self.sample_ID.get(), self.row_age.get(),
                                             self.spiked.get(), self.spiked_err.get(), self.filename_unspiked, self.filename_unspikedwash, 
                                             self.filename_Th, self.filename_Thwash, self.filename_U, self.filename_Uwash, 
                                             self.chem_lst, self.file_export,
                                             sample_wt_err, spike_wt_err, spike_conc_three, spike_conc_nine, zerotwo, zerotwo_err,
                                             self.Uwash, self.Thwash)
+        #run cups age calculation
         cups_calc.age_calculate_cups()
     
     """
@@ -980,18 +1187,30 @@ class Application(tk.Frame):
     """
     
     def Uwash_cups(self):
+        """
+        Cups U wash method
+        """
         
         self.Uwash = "cups"
     
     def Uwash_sem(self):
+        """
+        SEM U wash method
+        """
         
         self.Uwash = "sem"
         
     def Thwash_cups(self):
+        """
+        Cups Th wash method
+        """
         
         self.Thwash = "cups"
         
     def Thwash_sem(self):
+        """
+        SEM Th wash method
+        """
         
         self.Thwash = "sem"
         
@@ -1000,11 +1219,14 @@ class Application(tk.Frame):
     """
     
     def preset_change(self):
+        """
+        Runs function for changing preset values for 233 spike concentration, sample weight error, spike weight error, 230/232i value, and 230/232i error value.
+        """
         
         """
         preset values refer to the following:
-            [0]: 233 spike concentration (0.0 will be replaced by spike specific value if not specified)
-            [1]: 229 spike concentration (0.0 will be replaced by spike specific value if not specified)
+            [0]: 233 spike concentration (0.0 will be replaced by spike specific value specified)
+            [1]: 229 spike concentration (0.0 will be replaced by 1.0 if 233 spike concentration changed)
             [2]: sample weight error
             [3]: spike weight error
             [4]: 230/232 initial value
@@ -1015,17 +1237,19 @@ class Application(tk.Frame):
         Application_preset(self)
         
     def show(self):
+        """
+        Returns to main window after changing spike preset values and continues to method_used()
+        """
         
         self.master.update()
         self.master.deiconify()
         
         self.method_used()
         
-    """
-    Program quit function
-    """
-        
     def quit_program(self):
+        """
+        Window destroy
+        """
         
         self.master.destroy()
         root.quit()
@@ -1035,6 +1259,9 @@ class Application(tk.Frame):
     """
     
     def file_unspiked_upload_option(self):
+        """
+        Uploads altered unspiked standard file and once loaded marks checkbox
+        """
         filename_raw = filedialog.askopenfilename(parent = self)
         try: 
             filename_unspiked = openpyxl.Workbook()
@@ -1052,6 +1279,9 @@ class Application(tk.Frame):
             messagebox.showerror("Unexpected error: ", str(sys.exc_info()[:]))
     
     def file_unspiked_upload(self):
+        """
+        Uploads unspiked standard file and once loaded marks checkbox
+        """
         filename_raw = filedialog.askopenfilename(parent = self)
         try: 
             filename_unspiked = openpyxl.Workbook()
@@ -1070,6 +1300,9 @@ class Application(tk.Frame):
             self.CheckVar_unspiked_upload.set(1)
     
     def file_unspikedwash_upload(self):
+        """
+        Uploads unspiked standard wash file and once loaded marks checkbox
+        """
         filename_raw = filedialog.askopenfilename(parent = self)
         try: 
             filename_unspikedwash = openpyxl.Workbook()
@@ -1088,6 +1321,9 @@ class Application(tk.Frame):
             self.CheckVar_unspikedwash_upload.set(1)
     
     def file_Th_upload_option(self):
+        """
+        Uploads altered Th file and once loaded marks checkbox
+        """
         filename_raw = filedialog.askopenfilename(parent=self)
         try:
             filename_Th = openpyxl.Workbook()
@@ -1105,6 +1341,9 @@ class Application(tk.Frame):
             messagebox.showerror("Unexpected error:", str(sys.exc_info()[:]))  
     
     def file_Th_upload(self):
+        """
+        Uploads Th file and once loaded marks checkbox
+        """
         filename_raw = filedialog.askopenfilename(parent=self)
         try:
             filename_Th = openpyxl.Workbook()
@@ -1121,10 +1360,11 @@ class Application(tk.Frame):
         except:
             self.filename_Th = filename_raw
             self.CheckVar_Th_upload.set(1)
-        #else:
-        #    messagebox.showerror("Unexpected error:", str(sys.exc_info()[:]))
-            
+        
     def file_Thwash_upload(self):
+        """
+        Uploads Th wash file and once loaded marks checkbox
+        """
         filename_raw = filedialog.askopenfilename(parent=self)
         try:
             filename_Thwash = openpyxl.Workbook()
@@ -1141,11 +1381,11 @@ class Application(tk.Frame):
         except:
             self.filename_Thwash = filename_raw
             self.CheckVar_Thwash_upload.set(1)
-        #else:
-        #    messagebox.showerror("Unexpected error:", str(sys.exc_info()[:]))
-    
+      
     def file_U_upload_option(self):
-        
+        """
+        Uploads altered U file and once loaded marks checkbox
+        """
         filename_raw = filedialog.askopenfilename(parent=self)
         try:
             filename_U = openpyxl.Workbook()
@@ -1163,6 +1403,9 @@ class Application(tk.Frame):
             messagebox.showerror("Unexpected error:", str(sys.exc_info()[:]))
     
     def file_U_upload(self):
+        """
+        Uploads U file and once loaded marks checkbox
+        """
         filename_raw = filedialog.askopenfilename(parent=self)
         try:
             filename_U = openpyxl.Workbook()
@@ -1179,10 +1422,11 @@ class Application(tk.Frame):
         except:
             self.filename_U = filename_raw
             self.CheckVar_U_upload.set(1)
-        #else:
-        #    messagebox.showerror("Unexpected error:", str(sys.exc_info()[:]))
     
     def file_Uwash_upload(self):
+        """
+        Uploads U wash file and once loaded marks checkbox
+        """
         filename_raw = filedialog.askopenfilename(parent=self)
         try:
             filename_Uwash = openpyxl.Workbook()
@@ -1199,10 +1443,11 @@ class Application(tk.Frame):
         except:
             self.filename_Uwash = filename_raw
             self.CheckVar_Uwash_upload.set(1)
-        #else:
-        #    messagebox.showerror("Unexpected error:", str(sys.exc_info()[:])) 
-     
+    
     def file_chemblank_upload(self):
+        """
+        Uploads chemblank file values and once loaded marks checkbox
+        """
         filename_raw = filedialog.askopenfilename(parent = self)
         try:
             filename_chemblank = openpyxl.load_workbook(filename_raw)
@@ -1226,7 +1471,9 @@ class Application(tk.Frame):
             messagebox.showerror("Unexpected error:", str(sys.exc_info()[:])) 
     
     def file_upload_export(self):
-        
+        """
+        Uploads age spreadsheet and once loaded marks checkbox
+        """
         filename_raw = filedialog.askopenfilename(parent=self)
         try:
             self.file_export =  filename_raw
@@ -1238,9 +1485,13 @@ class Application(tk.Frame):
         
         
 class Application_sem():
-    
+    """
+    Reduces U and Th data run on SEM configuration
+    """
     def __init__(self, spike, AS_U, AS_Th, sample_wt, spike_wt, sample_ID, row_age, Th, Thwash, U, Uwash, chem_lst, export_age, sample_wt_err, spike_wt_err, spike_conc_three, spike_conc_nine, zerotwo, zerotwo_err):
-        
+        """
+        Imports input parameters and provides constants
+        """
         spike = str(spike)
 
         #Spike values
@@ -1395,6 +1646,9 @@ class Application_sem():
 
 
     def age_calculate_sem(self):
+        """
+        Reduces U/Th data for SEM configuration
+        """
        
         """
         Import functions for U, Th and wash values
@@ -1407,6 +1661,9 @@ class Application_sem():
         working_f = isofilter(self.file_U, "A")
         self.index_array_U = working_f.array()
         
+        """
+        SEM U data reduction
+        """
         wb_U = Ucalculation(self.spike, self.AS_U, self.file_U)
         
         lstU_Th = wb_U.U_normalization_forTh() #provides a list for use in Th normalization
@@ -1439,6 +1696,9 @@ class Application_sem():
         working_f = isofilter(self.file_Th, "A")
         self.index_array_Th = working_f.array()
         
+        """
+        SEM Th data reduction
+        """
         wb_Th = Thcalculation(self.spike, self.AS_Th, self.file_Th, lstU_Th)
         
         self.lstTh_Age = wb_Th.Th_normalization_forAge() #provides a list for use in Age Calculation
@@ -1453,6 +1713,9 @@ class Application_sem():
                 [5]: Unfiltered 229 counts
         """
         
+        """
+        SEM wash data reduction
+        """
         background = background_values(self.file_Uwash, self.file_Thwash)
         
         self.lstU_wash = background.U_wash()
@@ -1498,7 +1761,6 @@ class Application_sem():
         rel_err_2 = np.sqrt( (five_counting_err**2) + (three_counting_err**2) + (three_counting_err**2)*(8.0/9.0) )
         
         rel_err_five_three = max(rel_err_1, rel_err_2)
-        
         
         abs_err_five_three = rel_err_five_three * five_three_max_err
         
@@ -1830,16 +2092,20 @@ class Application_sem():
         
         messagebox.showinfo("Success! ", "Age calculation finished! ")
         
+        #plot 234U and 230Th to determine beam stability
         wb = plot_figure(self.four_beam_array, self.index_array_U, self.zero_beam_array, self.index_array_Th)
         
         wb.plot_fig()
         
         
 class Application_semcups():
-    
+    """
+    Reduces U and Th data with U run on a Cups configuration and Th run on a SEM configuration
+    """
     def __init__(self, spike, AS_Th, sample_wt, spike_wt, sample_ID, row_age, spiked, spiked_err, unspiked, unspikedwash, Th, Thwash, U, Uwash, chem_lst, export_age, sample_wt_err, spike_wt_err, spike_conc_three, spike_conc_nine, zerotwo, zerotwo_err, Uwash_option):
-     
-        
+        """
+        Imports input parameters and provides constants
+        """
         #spike input for Th calculation
         spike_six_three_dictionary = {"DIII-B":1.008398,"DIII-A": 1.008398,"1I":1.010128,"1H":1.010128}
         
@@ -1908,7 +2174,13 @@ class Application_semcups():
         
         
     def age_calculate_semcups(self):
+        """
+        Function for reducing SEM-Cups data
+        """
         
+        """
+        Cups unspiked standard data reduction
+        """
         wb_unspiked = unspiked_standard(self.file_unspiked, self.file_unspikedwash)
         
         lst_unspiked = wb_unspiked.unspiked_calc()
@@ -1932,6 +2204,9 @@ class Application_semcups():
         working_f = isofilter(self.file_U, "A")
         self.index_array_U = working_f.array()
         
+        """
+        Cups U data reduction
+        """
         wb_cups = Calculation_forCups(self.spike, lst_unspiked, self.chem_lst, self.spike_wt, self.sample_wt, self.spike_conc_three, self.spike_conc_nine, self.sample_wt_err, self.spike_wt_err)
         
         lst_Ucups = wb_cups.U_calc(self.file_U, self.file_Uwash, self.spiked_stand, self.spiked_stand_err, self.Uwash_option)
@@ -1959,6 +2234,9 @@ class Application_semcups():
         working_f = isofilter(self.file_Th, "A")
         self.index_array_Th = working_f.array()
         
+        """
+        SEM Th data reduction
+        """
         wb_Thsem = Thcalculation(self.spike_six_three, self.AS_Th, self.file_Th, lst_UTh)
         
         lst_ThAge = wb_Thsem.Th_normalization_forAge() 
@@ -2013,6 +2291,10 @@ class Application_semcups():
         
         zero_pmol = zero_pgg / self.wt_230
         zero_pmol_err = zero_pmol * (zero_pgg_err/zero_pgg)
+        
+        """
+        Age equations
+        """
         
         """
         Calculated atomic ratios
@@ -2205,15 +2487,20 @@ class Application_semcups():
         
         messagebox.showinfo("Success! ", "Age calculation finished! ")
         
+        #plot 234U and 230Th to determine beam stability
         wb = plot_figure(self.four_beam_array, self.index_array_U, self.zero_beam_array, self.index_array_Th)
         
         wb.plot_fig()
               
         
 class Application_cups():
-    
+    """
+    Reduces U and Th data run on Cups configuration
+    """
     def __init__(self, spike, sample_wt, spike_wt, sample_ID, row_age, spiked, spiked_err, unspiked, unspikedwash, Th, Thwash, U, Uwash, chem_lst, export_age, sample_wt_err, spike_wt_err, spike_conc_three, spike_conc_nine, zerotwo, zerotwo_err, Uwash_option, Thwash_option):
-     
+        """
+        Imports input parameters and provides constants
+        """
         self.spike = str(spike)
         
         #Other input parameters
@@ -2249,7 +2536,6 @@ class Application_cups():
         self.eight_filament_blank_err = 0.1
         self.sample_wt_err = float(sample_wt_err)
         self.spike_wt_err = float(spike_wt_err)
-
         self.two_nine_spike = 0.00065
         self.two_nine_spike_err = 0.00005
         self.AS_1amu = 1.00E-10
@@ -2275,6 +2561,13 @@ class Application_cups():
         self.Thwash_option = Thwash_option
    
     def age_calculate_cups(self):
+        """
+        Function for reducing Cups data
+        """
+        
+        """
+        Cups unspiked standard data reduction
+        """
         
         wb_unspiked = unspiked_standard(self.file_unspiked, self.file_unspikedwash)
         
@@ -2299,6 +2592,9 @@ class Application_cups():
         working_f = isofilter(self.file_U, "A")
         self.index_array_U = working_f.array()
         
+        """
+        Cups U data reduction
+        """
         wb_cups = Calculation_forCups(self.spike, lst_unspiked, self.chem_lst, self.spike_wt, self.sample_wt, self.spike_conc_three, self.spike_conc_nine, self.sample_wt_err, self.spike_wt_err)
         
         lst_Ucups = wb_cups.U_calc(self.file_U, self.file_Uwash, self.spiked_stand, self.spiked_stand_err, self.Uwash_option)
@@ -2318,7 +2614,6 @@ class Application_cups():
         
         lst_UTh = [lst_Ucups[5], lst_Ucups[6], lst_Ucups[7], lst_Ucups[8]]
         
-        
         #230 unfiltered array for plot
         working_e = isofilter(self.file_Th, "D")
         self.zero_beam_array = working_e.array()
@@ -2326,6 +2621,10 @@ class Application_cups():
         #index array for plot
         working_f = isofilter(self.file_Th, "A")
         self.index_array_Th = working_f.array()
+        
+        """
+        Cups Th data reduction
+        """
         
         lst_Thcups = wb_cups.Thcups_calc(self.file_Th, self.file_Thwash, lst_UTh, self.Thwash_option)
         
@@ -2343,7 +2642,7 @@ class Application_cups():
                 [9]: 230/232 ratio
                 [10]: 230/232 ratio error
         """
-       
+        
         #results from U cups and Th cups calculations
         eight_ppb = lst_Ucups[0]
         eight_ppb_err = lst_Ucups[1]
@@ -2368,6 +2667,9 @@ class Application_cups():
         zero_pmol = zero_pgg / self.wt_230
         zero_pmol_err = zero_pmol * (zero_pgg_err/zero_pgg)
         
+        """
+        Age equations
+        """
         
         """
         Calculated atomic ratios
@@ -2561,6 +2863,7 @@ class Application_cups():
         
         messagebox.showinfo("Success! ", "Age calculation finished! ")
         
+        #plot 234U and 230Th for determining beam stability
         wb = plot_figure(self.four_beam_array, self.index_array_U, self.zero_beam_array, self.index_array_Th)
         
         wb.plot_fig()
@@ -4385,6 +4688,9 @@ class Thcalculation():
         return lstTh_age
 
 class background_values():
+    """
+    Extracts wash method values for SEM U and Th runs
+    """
     
     def __init__(self, U_file, Th_file):
         
@@ -4722,9 +5028,13 @@ class plot_figure(tk.Tk):
 
 
 class Application_preset(tk.Toplevel):
-    
+    """
+    Tkinter class for changing preset values
+    """
     def __init__(self, original):
-        #tk.Toplevel.__init__(self)
+        """
+        Opens new Tkinter window if you have chosen to change your 233 spike concentration, sample weight error, spike weight error, 230/232i, and 230/232i error values
+        """
         self.original_frame = original
         self.otherframe = tk.Toplevel()
         self.otherframe.protocol("WM_DELETE_WINDOW", on_closing)
@@ -4733,11 +5043,12 @@ class Application_preset(tk.Toplevel):
         dialog_frame.pack()
         tk.Label(dialog_frame, text = "Options for changing preset values", font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'w')
         
-        
         self.spike_conc_option()
         
     def spike_conc_option(self):
-        
+        """
+        Option for changing 233U concentration of spike
+        """
         dialog_frame = tk.Frame(self.otherframe)
         dialog_frame.pack()
         
@@ -4752,6 +5063,9 @@ class Application_preset(tk.Toplevel):
         self.CheckVar_spike_no = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_spike_no, command = self.spike_no).grid(row = 0, column = 2, sticky = 'e')
         
     def spike_yes(self):
+        """
+        Manual entry window for changing 233U spike concentration. Provides option of changing sample weight error
+        """
         
         self.spike_yes = 1
         
@@ -4774,6 +5088,9 @@ class Application_preset(tk.Toplevel):
         self.CheckVar_samplewt_no = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_samplewt_no, command = self.samplewt_no).grid(row = 1, column = 1, sticky = 'e')
         
     def spike_no(self):
+        """
+        Provides option of changing sample weight error
+        """
         
         dialog_frame = tk.Frame(self.otherframe)
         dialog_frame.pack()
@@ -4789,6 +5106,9 @@ class Application_preset(tk.Toplevel):
         self.CheckVar_samplewt_no = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_samplewt_no, command = self.samplewt_no).grid(row = 0, column = 2, sticky = 'w')
         
     def samplewt_yes(self):
+        """
+        Manual entry window for changing sample weight error. Provides option for changing spike weight error
+        """
         
         dialog_frame = tk.Frame(self.otherframe)
         dialog_frame.pack()
@@ -4811,6 +5131,9 @@ class Application_preset(tk.Toplevel):
         self.CheckVar_spikewt_no = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_spikewt_no, command = self.spikewt_no).grid(row = 1, column = 1, sticky = 'e')
     
     def samplewt_no(self):
+        """
+        Provides option for changing spike weight error
+        """
         
         dialog_frame = tk.Frame(self.otherframe)
         dialog_frame.pack()
@@ -4827,6 +5150,9 @@ class Application_preset(tk.Toplevel):
     
     
     def spikewt_yes(self):
+        """
+        Manual entry window for changing spike weight error. Provides option for changing 230/232i values
+        """
         
         dialog_frame = tk.Frame(self.otherframe)
         dialog_frame.pack()
@@ -4849,6 +5175,9 @@ class Application_preset(tk.Toplevel):
         self.option_zerotwo_no_cups = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_zerotwo_no, command = self.zerotwo_no).grid(row = 1, column = 1, sticky = 'e')
     
     def spikewt_no(self):
+        """
+        Provides option for changing 230/232i values
+        """
         
         dialog_frame = tk.Frame(self.otherframe)
         dialog_frame.pack()
@@ -4864,6 +5193,9 @@ class Application_preset(tk.Toplevel):
         self.option_zerotwo_no_cups = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_zerotwo_no, command = self.zerotwo_no).grid(row = 0, column = 2, sticky = 'e')
     
     def zerotwo_yes(self):
+        """
+        Manual entry windows for changing 230/232i value and 230/232i error value. Provides option to submit changed preset values
+        """
         
         dialog_frame = tk.Frame(self.otherframe)
         dialog_frame.pack()
@@ -4883,6 +5215,9 @@ class Application_preset(tk.Toplevel):
         self.submit_button = tk.Button(dialog_frame, text = "Submit", font = ('TkDefaultFont', 10), default = "active", command = self.click_submit).grid(row = 2, column = 0)
         
     def zerotwo_no(self):
+        """
+        Provides option to submit changed preset values
+        """
         
         dialog_frame = tk.Frame(self.otherframe)
         dialog_frame.pack()
@@ -4890,6 +5225,9 @@ class Application_preset(tk.Toplevel):
         self.submit_button = tk.Button(dialog_frame, text = "Submit", font = ('TkDefaultFont', 10), default = "active", command = self.click_submit).grid(row = 0, column = 0)
         
     def click_submit(self):
+        """
+        Updates global preset values if changed. If 233U concentration is changed, 229Th value is set to 1.0 and changed later in code. Returns to original window.
+        """
         
         if self.spike_yes == 1:
             spike_conc_three = self.spike_conc_three.get()
@@ -4919,6 +5257,9 @@ class Application_preset(tk.Toplevel):
         self.original_frame.show()
     
     def on_closing(self):
+        """
+        If secondary window is X'ed out of, prompts you to quit 
+        """
         if messagebox.askokcancel("Quit", "Do you want to quit?"):
             self.otherframe.destroy()
         
@@ -4928,6 +5269,9 @@ root = tk.Tk()
 app = Application(master=root)
 
 def on_closing():
+    """
+    If primary window is X'ed out of, prompts you to quit 
+    """
     if messagebox.askokcancel("Quit", "Do you want to quit?"):
         root.destroy()
         root.quit()

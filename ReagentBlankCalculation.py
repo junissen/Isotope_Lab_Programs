@@ -5,7 +5,8 @@ Created on Thu Jul 20 11:28:27 2017
 
 @author: julianissen
 
-Finalized version of reagent blank calculator
+Finalized version of reagent blank calculator. Exports Excel document with reagent blank values.  
+
 """
 
 
@@ -22,10 +23,13 @@ from itertools import islice
 
 class Application(tk.Frame):
     """
-    GUI for working with ChemBlankCalculation
+    GUI for working with ReagentBlankCalculation
     """
     
     def __init__(self, master):
+        """
+        Initiates Tkinter window for importing reagent blank information
+        """
         tk.Frame.__init__(self,master)
         self.dialog_frame_top = tk.Frame(self)
         self.dialog_frame_top.pack()
@@ -36,7 +40,7 @@ class Application(tk.Frame):
     
     def create_widgets(self):
         """
-        creates manual entry windows for blank name, solution weight, uptake rate, ionization efficiency
+        Creates manual entry windows for blank name, solution weight, uptake rate, ionization efficiency
         and reagent blank export file name
         """
         self.dialog_frame = tk.Frame(self)
@@ -54,24 +58,25 @@ class Application(tk.Frame):
         self.sln_wt.grid(row = 1, column = 1, sticky = 'w')
         self.sln_wt.focus_set()
         
-        #Uptake rate
+        #uptake rate
         tk.Label(self.dialog_frame, text = "Enter uptake rate:  ", font = ('TkDefaultFont', 10) ).grid(row = 2, column = 0, sticky = 'w')
         self.uptake_rate = tk.Entry(self.dialog_frame, background = 'white', width = 12)
         self.uptake_rate.grid(row = 2, column = 1, sticky = 'w')
         self.uptake_rate.focus_set()
         
-        #Ionization efficiency
+        #ionization efficiency
         tk.Label(self.dialog_frame, text = "Enter ionization efficiency:  ", font = ('TkDefaultFont', 10) ).grid(row = 3, column = 0, sticky = 'w')
         self.IE = tk.Entry(self.dialog_frame, background = 'white', width = 12)
         self.IE.grid(row = 3, column = 1, sticky = 'w')
         self.IE.focus_set()
         
-        #Reagent blank filename
+        #reagent blank filename
         tk.Label(self.dialog_frame, text = "Enter reagent blank export file name (include .xlsx):  ", font = ('TkDefaultFont', 10) ).grid(row = 4, column = 0, sticky = 'w')
         self.filename = tk.Entry(self.dialog_frame, background = 'white', width = 12)
         self.filename.grid(row = 4, column = 1, sticky = 'w')
         self.filename.focus_set()
         
+        #option of altering Th method
         tk.Label(self.dialog_frame, text = 'Would you like to alter your Th method file before running?: ', font = ('TkDefaultFont', 10) ).grid(row = 5, column = 0, sticky = 'w')
         
         self.CheckVar_th_yes = tk.IntVar()
@@ -83,27 +88,34 @@ class Application(tk.Frame):
         self.th_no = tk.Checkbutton(self.dialog_frame, text = 'No', font = ('TkDefaultFont', 10) , variable = self.CheckVar_th_no, command = self.th_no).grid(row = 5, column = 1, sticky = 'e')
         
     def th_yes(self):
+        """
+        Changing Th file by specifying which cycle to end on, uploading altered Th files
+        """
         
         checkbutton_frame = tk.Frame(self)
         checkbutton_frame.pack()
         
+        #altering Th file
         tk.Label(checkbutton_frame, text = 'Enter last cycle # to be analyzed: ', font = ('TkDefaultFont', 10) ).grid(row = 0, column = 0, sticky = 'e')
         self.rowinput_th = tk.Entry(checkbutton_frame, background = 'white', width = 12)
         self.rowinput_th.grid(row = 0, column = 1, sticky = 'w')
         self.rowinput_th.focus_set()
       
+        #uploading Th file
         self.th_regblank_upload = tk.Button(checkbutton_frame, text = 'Upload Th reagent blank file', font = ('TkDefaultFont', 10) , command = self.file_upload_th_regblank_option).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_th_regblank = tk.IntVar()
         self.CheckVar_th_regblank.set(0)
-        self.th_reglank_checkbutton = tk.Checkbutton(checkbutton_frame, text = 'Uploaded', font = ('TkDefaultFont', 10) , variable = self.CheckVar_th_regblank).grid(row = 1, column = 1, sticky = 'w')
+        self.th_regblank_checkbutton = tk.Checkbutton(checkbutton_frame, text = 'Uploaded', font = ('TkDefaultFont', 10) , variable = self.CheckVar_th_regblank).grid(row = 1, column = 1, sticky = 'w')
         
+        #uploading Th wash file
         self.th_regblankwash_upload = tk.Button(checkbutton_frame, text = 'Upload Th reagent blank wash file', font = ('TkDefaultFont', 10) , command = self.file_upload_th_regblankwash).grid(row = 2, column = 0, sticky = 'e')
         
         self.CheckVar_th_regblankwash = tk.IntVar()
         self.CheckVar_th_regblankwash.set(0)
         self.th_regblankwash_checkbutton = tk.Checkbutton(checkbutton_frame, text = 'Uploaded', font = ('TkDefaultFont', 10) , variable = self.CheckVar_th_regblankwash).grid(row = 2, column = 1, sticky = 'w')
         
+        #option of altering U method
         tk.Label(checkbutton_frame, text = 'Would you like to alter your U method file before running?: ', font = ('TkDefaultFont', 10) ).grid(row = 3, column = 0, sticky = 'w')
         
         self.CheckVar_u_yes = tk.IntVar()
@@ -115,10 +127,14 @@ class Application(tk.Frame):
         self.u_no = tk.Checkbutton(checkbutton_frame, text = 'No', font = ('TkDefaultFont', 10) , variable = self.CheckVar_u_no, command = self.u_no).grid(row = 3, column = 1, sticky = 'e')
     
     def th_no(self):
+        """
+        Uploading unaltered Th files
+        """
         
         checkbutton_frame = tk.Frame(self)
         checkbutton_frame.pack()
         
+        #uploading Th file
         self.th_regblank_upload = tk.Button(checkbutton_frame, text = 'Upload Th reagent blank file', font = ('TkDefaultFont', 10) , command = self.file_upload_th_regblank).grid(row = 0, column = 0, sticky = 'e')
         
         self.CheckVar_th_regblank = tk.IntVar()
@@ -127,10 +143,12 @@ class Application(tk.Frame):
         
         self.th_regblankwash_upload = tk.Button(checkbutton_frame, text = 'Upload Th reagent blank wash file', font = ('TkDefaultFont', 10) , command = self.file_upload_th_regblankwash).grid(row = 1, column = 0, sticky = 'e')
         
+        #uploading Th wash file
         self.CheckVar_th_regblankwash = tk.IntVar()
         self.CheckVar_th_regblankwash.set(0)
         self.th_regblankwash_checkbutton = tk.Checkbutton(checkbutton_frame, text = 'Uploaded', font = ('TkDefaultFont', 10) , variable = self.CheckVar_th_regblankwash).grid(row = 1, column = 1, sticky = 'w')
         
+        #option of altering U method
         tk.Label(checkbutton_frame, text = 'Would you like to alter your U method file before running?: ', font = ('TkDefaultFont', 10) ).grid(row = 2, column = 0, sticky = 'w')
         
         self.CheckVar_u_yes = tk.IntVar()
@@ -142,53 +160,71 @@ class Application(tk.Frame):
         self.u_no = tk.Checkbutton(checkbutton_frame, text = 'No', font = ('TkDefaultFont', 10) , variable = self.CheckVar_u_no, command = self.u_no).grid(row = 2, column = 2, sticky = 'w')       
     
     def u_yes(self):
+        """
+        Changing U file by specifying which cycle to end on, uploading altered U files
+        """
+        
         checkbutton_frame = tk.Frame(self)
         checkbutton_frame.pack()
         
+        #alteirng U file
         tk.Label(checkbutton_frame, text = 'Enter last cycle # to be analyzed: ', font = ('TkDefaultFont', 10) ).grid(row = 0, column = 0, sticky = 'e')
         self.rowinput_u = tk.Entry(checkbutton_frame, background = 'white', width = 12)
         self.rowinput_u.grid(row = 0, column = 1, sticky = 'w')
         self.rowinput_u.focus_set()
-      
+        
+        #uploading U file
         self.u_regblank_upload = tk.Button(checkbutton_frame, text = 'Upload U reagent blank file', font = ('TkDefaultFont', 10) , command = self.file_upload_u_regblank_option).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_u_regblank = tk.IntVar()
         self.CheckVar_u_regblank.set(0)
         self.u_regblank_checkbutton = tk.Checkbutton(checkbutton_frame, text = 'Uploaded', font = ('TkDefaultFont', 10) , variable = self.CheckVar_u_regblank).grid(row = 1, column = 1, sticky = 'w')
         
+        #uploading U wash file
         self.u_regblankwash_upload = tk.Button(checkbutton_frame, text = 'Upload U reagent blank wash file', font = ('TkDefaultFont', 10) , command = self.file_upload_u_regblankwash).grid(row = 2, column = 0, sticky = 'e')
         
         self.CheckVar_u_regblankwash = tk.IntVar()
         self.CheckVar_u_regblankwash.set(0)
         self.u_regblankwash_checkbutton = tk.Checkbutton(checkbutton_frame, text = 'Uploaded', font = ('TkDefaultFont', 10) , variable = self.CheckVar_u_regblankwash).grid(row = 2, column = 1, sticky = 'w')
-                
+        
+        #run reagent blank calculation        
         self.chemblank = tk.Button(checkbutton_frame, text = 'Calculate reagent blank and export data', font = ('TkDefaultFont', 10) , command = self.blank_calculate, default = 'active').grid(row = 3, column = 1, sticky = 'w')
         
+        #quit
         self.quit = tk.Button(checkbutton_frame, text="QUIT", font = ('TkDefaultFont', 10) , command= self.quit_program).grid(row = 3, column = 2, sticky = 'w')
     
     def u_no(self):
+        """
+        Uploading unaltered U files
+        """
         
         checkbutton_frame = tk.Frame(self)
         checkbutton_frame.pack()     
         
+        #uploading U file
         self.u_regblank_upload = tk.Button(checkbutton_frame, text = 'Upload U reagent blank file', font = ('TkDefaultFont', 10) , command = self.file_upload_u_regblank).grid(row = 0, column = 0, sticky = 'e')
         
         self.CheckVar_u_regblank = tk.IntVar()
         self.CheckVar_u_regblank.set(0)
         self.u_regblank_checkbutton = tk.Checkbutton(checkbutton_frame, text = 'Uploaded', font = ('TkDefaultFont', 10) , variable = self.CheckVar_u_regblank).grid(row = 0, column = 1, sticky = 'w')
         
+        #uploading U wash file
         self.u_regblankwash_upload = tk.Button(checkbutton_frame, text = 'Upload U reagent blank wash file', font = ('TkDefaultFont', 10) , command = self.file_upload_u_regblankwash).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_u_regblankwash = tk.IntVar()
         self.CheckVar_u_regblankwash.set(0)
         self.u_regblankwash_checkbutton = tk.Checkbutton(checkbutton_frame, text = 'Uploaded', font = ('TkDefaultFont', 10) , variable = self.CheckVar_u_regblankwash).grid(row = 1, column = 1, sticky = 'w')
-                
+        
+        #run reagent blank calculation        
         self.chemblank = tk.Button(checkbutton_frame, text = 'Calculate chemblank and export data', font = ('TkDefaultFont', 10) , command = self.blank_calculate, default = 'active').grid(row = 2, column = 1, sticky = 'w')
         
+        #quit
         self.quit = tk.Button(checkbutton_frame, text="QUIT", font = ('TkDefaultFont', 10) , command= self.quit_program).grid(row = 2, column = 2, sticky = 'w')
     
     def quit_program(self):
-        
+        """
+        Window destroy
+        """
         self.master.destroy()
         root.quit()
     
@@ -241,7 +277,6 @@ class Application(tk.Frame):
         """
     
         filename_raw = filedialog.askopenfilename(parent=self)
-        #self.filename_th_chemblankwash = filename_raw
         try:
             filename_th_regblankwash = openpyxl.Workbook()
             ws = filename_th_regblankwash.worksheets[0]
@@ -264,7 +299,6 @@ class Application(tk.Frame):
         """
     
         filename_raw = filedialog.askopenfilename(parent=self)
-        #self.filename_u_chemblank = filename_raw
         try:
             filename_u_regblank = openpyxl.Workbook()
             ws = filename_u_regblank.worksheets[0]
@@ -287,7 +321,6 @@ class Application(tk.Frame):
         """
     
         filename_raw = filedialog.askopenfilename(parent=self)
-        #self.filename_u_chemblank = filename_raw
         try:
             filename_u_regblank = openpyxl.Workbook()
             ws = filename_u_regblank.worksheets[0]
@@ -310,7 +343,6 @@ class Application(tk.Frame):
         """
     
         filename_raw = filedialog.askopenfilename(parent=self)
-        #self.filename_u_chemblankwash = filename_raw
         try:
             filename_u_regblankwash = openpyxl.Workbook()
             ws = filename_u_regblankwash.worksheets[0]
@@ -349,35 +381,36 @@ class Application(tk.Frame):
         self.wt_235 = 235.043924
         self.wt_236 = 236.045563
         self.wt_238 = 238.050785
+        
         """
         Th wash and chem blank values
         """
-        #wash 229 Th
+        #wash 229Th
         working_a = chem_blank(self.filename_th_regblankwash, "C", "229")
         nine_wash = working_a.calc()
         
         
-        #chem blank 229 Th
+        #chem blank 229Th
         working_b = chem_blank(self.filename_th_regblank, "C", "229")
         nine = working_b.calc()
         
         
-        #wash 230 Th
+        #wash 230Th
         working_c = chem_blank(self.filename_th_regblankwash, "D", "230")
         zero_wash = working_c.calc()
         
         
-        #chem blank 230 Th
+        #chem blank 230Th
         working_d = chem_blank(self.filename_th_regblank, "D", "230")
         zero = working_d.calc()
         
         
-        #wash 232 Th
+        #wash 232Th
         working_e = chem_blank(self.filename_th_regblankwash, "E", "232")
         two_wash = working_e.calc()
         
         
-        #chem blank 232Th
+        #chem blank232Th
         working_f = chem_blank(self.filename_th_regblank, "E", "232")
         two = working_f.calc()
         
@@ -542,8 +575,14 @@ class Application(tk.Frame):
         messagebox.showinfo("Reagent blank data file saved ! ", "Reagent blank data file name: "+ str(self.filename))
 
 class chem_blank():
+        """
+        Class for analyzing ICP-MS files
+        """
     
         def __init__(self,filename, columnletter, int_time):
+            """
+            Uploads column from specified file 
+            """
             self.column = str(columnletter)+'{}:'+str(columnletter)+'{}'
             self.filename = str(filename)
             self.workbook = openpyxl.load_workbook(self.filename)
@@ -560,7 +599,7 @@ class chem_blank():
                       
         def calc(self):
             """
-            Code calculates the mean, total cycles, and 2s counting statistics error of chem blanks
+            Code calculates the mean, total cycles, and 2s counting statistics error of Excel column
             """
             outlist = []
             outcounts = 0
@@ -589,6 +628,7 @@ class chem_blank():
             
             lst_blank = [self.mean, self.counts, self.err_rel]
         
+            #returns list of mean, counts, and 2s counting error 
             return lst_blank
        
             
@@ -597,6 +637,9 @@ root = tk.Tk()
 app = Application(master=root)
 
 def on_closing():
+    """
+    If window is X'ed out of, prompts you to quit 
+    """
     if messagebox.askokcancel("Quit", "Do you want to quit?"):
         root.destroy()
         root.quit()

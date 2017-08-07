@@ -29,6 +29,9 @@ class Application(tk.Frame):
     Root GUI for working with StandardCalculation. Gives option of either running SEM or Cups standard.
     """
     def __init__(self, master):
+        """
+        Initiates Tkinter window for importing standard information
+        """
         tk.Frame.__init__(self,master)
         self.dialog_frame_top = tk.Frame(self)
         self.dialog_frame_top.pack()
@@ -38,6 +41,9 @@ class Application(tk.Frame):
         self.pack()
    
     def create_widgets(self):
+        """
+        Prompts whether running standard on Cups or SEM
+        """
         
         self.dialog_frame = tk.Frame(self)
         self.dialog_frame.pack()
@@ -52,11 +58,15 @@ class Application(tk.Frame):
         self.checkbutton_cups = tk.Checkbutton(self.dialog_frame, text = 'CUPS', font = ('TkDefaultFont', 10), variable = self.CheckVar_cups, command = self.cups_command).grid(row = 0, column = 2, sticky = 'w')
         
     def sem_command(self):
-        
+        """
+        Runs functions for calculating SEM standard
+        """
         Application_sem()
     
     def cups_command(self):
-        
+        """    
+        Runs functions for calculating Cups standard
+        """
         Application_cups()
             
 class Application_sem(tk.Frame):
@@ -65,32 +75,42 @@ class Application_sem(tk.Frame):
     """
     
     def __init__(self, master=None):
+        """
+        Initiates SEM Tkinter options
+        """
         tk.Frame.__init__(self)
         self.pack()
         self.create_widgets_sem()
     
     def create_widgets_sem(self):
+        """
+        Creates manual entry windows for AS, 234U wash, and spike.  
+        """
          
         dialog_frame_sem = tk.Frame(self)
         dialog_frame_sem.pack()
         
         tk.Label(dialog_frame_sem, text = "112A Standard Calculator for SEM:", font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'w')
         
-        tk.Label(dialog_frame_sem, text = "Enter abundant sensitivity for 237U-238U:  ", font = ('TkDefaultFont', 10)).grid(row  = 1, column = 0, sticky = 'w')
+        #abundance sensitivity
+        tk.Label(dialog_frame_sem, text = "Enter abundance sensitivity for 237U-238U:  ", font = ('TkDefaultFont', 10)).grid(row  = 1, column = 0, sticky = 'w')
         self.AS = tk.Entry(dialog_frame_sem, background = 'white', width = 12)
         self.AS.grid(row = 1, column = 1, sticky = 'w')
         self.AS.focus_set()
         
+        #234U wash in cps
         tk.Label(dialog_frame_sem, text = "Enter 234U wash cps:  ", font = ('TkDefaultFont', 10)).grid(row = 2, column = 0, sticky = 'w')
         self.wash = tk.Entry(dialog_frame_sem, background = 'white', width = 12)
         self.wash.grid(row = 2, column = 1, sticky = 'w')
         self.wash.focus_set()
         
+        #spike used
         tk.Label(dialog_frame_sem, text = "Enter standard spike information (choose from: DIII-B, DIII-A, 1I, 1H):  ", font = ('TkDefaultFont', 10)).grid(row = 3, column = 0, sticky = 'w')
         self.spikeinput = tk.Entry(dialog_frame_sem, background = 'white', width = 12)
         self.spikeinput.grid(row = 3, column = 1, sticky = 'w')
         self.spikeinput.focus_set()
         
+        #option of altering standard method
         tk.Label(dialog_frame_sem, text = "Would you like to alter your standard method file before running?: ", font = ('TkDefaultFont', 10) ).grid(row = 4, column = 0, sticky = 'e')
         
         self.CheckVar_option_yes = tk.IntVar()
@@ -102,40 +122,55 @@ class Application_sem(tk.Frame):
         self.option_checkbutton_no = tk.Checkbutton(dialog_frame_sem, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_option_no, command = self.option_no).grid(row = 4, column = 1, sticky = 'e')
     
     def option_no(self):
+        """
+        Uploading unaltered 112A standard
+        """
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #uploading 112A standard file
         self.usem_uploadbutton = tk.Button(dialog_frame, text = 'Upload 112A standard file', font = ('TkDefaultFont', 10), command = self.file_usem_upload).grid(row = 0, column = 0, sticky = 'e')
     
         self.CheckVar_usem_upload = tk.IntVar()
         self.CheckVar_usem_upload.set(0)
         self.usem_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_usem_upload).grid(row = 0, column = 1, sticky = 'w')
-    
+        
+        #run SEM standard calculation
         self.standard = tk.Button(dialog_frame, text = 'Calculate Standard',font = ('TkDefaultFont', 10),  default = 'active', command = self.standard).grid(row = 1, column = 1, sticky = 'w')
-    
+        
+        #quit
         self.quit = tk.Button(dialog_frame, text="QUIT", font = ('TkDefaultFont', 10), command= self.quit_program).grid(row = 1, column = 2, sticky = 'w')
     
     def option_yes(self):
+        """
+        Changing 112A standard file by specifying which cycle to end on, uploading altered 112A files
+        """
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #altering 112A standard file
         tk.Label(dialog_frame, text = 'Enter last cycle # to be analyzed: ', font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'e')
         self.rowinput = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.rowinput.grid(row = 0, column = 1, sticky = 'w')
         self.rowinput.focus_set()
         
+        #uploading 112A standard file
         self.usem_uploadbutton = tk.Button(dialog_frame, text = 'Upload 112A standard file', font = ('TkDefaultFont', 10), command = self.file_usem_upload_option).grid(row = 1, column = 0, sticky = 'e')
     
         self.CheckVar_usem_upload = tk.IntVar()
         self.CheckVar_usem_upload.set(0)
         self.usem_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_usem_upload).grid(row = 1, column = 1, sticky = 'w')
     
+        #run SEM standard calculation
         self.standard = tk.Button(dialog_frame, text = 'Calculate Standard', font = ('TkDefaultFont', 10), default = 'active', command = self.standard).grid(row = 2, column = 1, sticky = 'w')
     
+        #quit
         self.quit = tk.Button(dialog_frame, text="QUIT", font = ('TkDefaultFont', 10), command= self.quit_program).grid(row = 2, column = 2, sticky = 'w')
     
     def quit_program(self):
-        
+        """
+        Window destroy
+        """
         self.master.destroy()
         root.quit()
         
@@ -337,7 +372,7 @@ class Application_sem(tk.Frame):
         five_three_err_rel = self.five_three_err_meas/self.five_three_mean_meas
         six_three_err_rel = self.six_three_err_meas/self.six_three_mean_meas
        
-        #calculculates the 236/233 corrected error
+        #calculates the 236/233 corrected error
         self.six_three_corr_err = self.six_three_corr * np.sqrt( six_three_err_rel**2 + 
                                                                 ( (self.AS_six_eight * self.five_three_mean_meas 
                                                                    * self.eight_five_rat)/self.spike  
@@ -362,11 +397,11 @@ class Application_sem(tk.Frame):
         self.four_five_norm_err = self.four_five_norm * np.sqrt( four_five_err_rel**2 + 
                                                                 (self.six_three_corr_err_rel/3)**2 )
         
-        #calculates constants that will be used to calculated corrected 234/235
+        #calculates constants that will be used to calculate corrected 234/235
         AS_four_eight_err_rel = 0.3
         four_five_norm_err_rel = self.four_five_norm_err/self.four_five_norm
         
-        #corrects the normalized 234/235 ratio for 238 tail and calculated the resulting error
+        #corrects the normalized 234/235 ratio for 238 tail and calculates the resulting error
         self.four_five_normcorr = self.four_five_norm * (1 - ( self.eight_five_rat 
                                                               * self.AS_four_eight/ self.four_five_norm ))
 
@@ -408,22 +443,30 @@ class Application_cups(tk.Frame):
     """
     
     def __init__(self, master=None):
+        """
+        Initiates Cups Tkinter options
+        """
         tk.Frame.__init__(self)
         self.pack()
         self.create_widgets_cups()
     
     def create_widgets_cups(self):
+        """
+        Creates manual entry windows for spike  
+        """
          
         dialog_frame_cups = tk.Frame(self)
         dialog_frame_cups.pack()
         
         tk.Label(dialog_frame_cups, text = "112A Standard Calculator for Cups:", font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'w')
         
+        #spike used
         tk.Label(dialog_frame_cups, text = "Enter standard spike information (choose from: DIII-B, DIII-A, 1I, 1H):  ", font = ('TkDefaultFont', 10)).grid(row = 1, column = 0, sticky = 'w')
         self.spikeinput = tk.Entry(dialog_frame_cups, background = 'white', width = 12)
         self.spikeinput.grid(row = 1, column = 1, sticky = 'w')
         self.spikeinput.focus_set()
         
+        #option of altering unspiked standard file
         tk.Label(dialog_frame_cups, text = "Would you like to alter your unspiked standard method file before running?: ", font = ('TkDefaultFont', 10)).grid(row = 2, column = 0, sticky = 'e')
         
         self.CheckVar_unspiked_yes = tk.IntVar()
@@ -435,26 +478,34 @@ class Application_cups(tk.Frame):
         self.option_unspiked_no = tk.Checkbutton(dialog_frame_cups, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_unspiked_no, command = self.unspiked_no).grid(row = 2, column = 1, sticky = 'e')
     
     def unspiked_yes(self):
+        """
+        Changing unspiked standard file by specifying which cycle to end on, uploading altered unspiked standard files
+        """
+        
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
-        
+    
+        #altering unspiked standard file
         tk.Label(dialog_frame, text = 'Enter last cycle # to be analyzed: ', font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'e')
         self.rowinput_unspiked = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.rowinput_unspiked.grid(row = 0, column = 1, sticky = 'w')
         self.rowinput_unspiked.focus_set()
         
+        #uploading unspiked standard file
         self.unspiked_uploadbutton = tk.Button(dialog_frame, text = 'Upload unspiked standard', font = ('TkDefaultFont', 10), command = self.file_unspiked_upload_option).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_unspiked_upload = tk.IntVar()
         self.CheckVar_unspiked_upload.set(0)
         self.unspiked_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_unspiked_upload).grid(row = 1, column = 1, sticky = 'w')
         
+        #uploading unspiked standard wash file
         self.unspiked_wash_uploadbutton = tk.Button(dialog_frame, text = 'Upload unspiked standard wash', font = ('TkDefaultFont', 10), command = self.file_unspiked_wash_upload).grid(row = 2, column = 0, sticky = 'e')
         
         self.CheckVar_unspiked_wash_upload = tk.IntVar()
         self.CheckVar_unspiked_wash_upload.set(0)
         self.unspiked_wash_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_unspiked_wash_upload).grid(row = 2, column = 1, sticky = 'w')
         
+        #option of altering spiked standard file
         tk.Label(dialog_frame, text = "Would you like to alter your spiked standard method file before running?: ", font = ('TkDefaultFont', 10)).grid(row = 3, column = 0)
         
         self.CheckVar_spiked_yes = tk.IntVar()
@@ -466,21 +517,27 @@ class Application_cups(tk.Frame):
         self.option_spiked_no = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_spiked_no, command = self.spiked_no).grid(row = 3, column = 1)
         
     def unspiked_no(self):
+        """
+        Uploading unaltered unspiked standard files
+        """
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #uploading unspiked standard file
         self.unspiked_uploadbutton = tk.Button(dialog_frame, text = 'Upload unspiked standard', font = ('TkDefaultFont', 10), command = self.file_unspiked_upload).grid(row = 0, column = 0, sticky = 'e')
         
         self.CheckVar_unspiked_upload = tk.IntVar()
         self.CheckVar_unspiked_upload.set(0)
         self.unspiked_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_unspiked_upload).grid(row = 0, column = 1, sticky = 'w')
         
+        #uploading unspiked standard wash file
         self.unspiked_wash_uploadbutton = tk.Button(dialog_frame, text = 'Upload unspiked standard wash', font = ('TkDefaultFont', 10), command = self.file_unspiked_wash_upload).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_unspiked_wash_upload = tk.IntVar()
         self.CheckVar_unspiked_wash_upload.set(0)
         self.unspiked_wash_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_unspiked_wash_upload).grid(row = 1, column = 1, sticky = 'w')
         
+        #option of altering spiked standard file
         tk.Label(dialog_frame, text = "Would you like to alter your spiked standard method file before running?: ", font = ('TkDefaultFont', 10) ).grid(row = 2, column = 0, sticky = 'w')
         
         self.CheckVar_spiked_yes = tk.IntVar()
@@ -492,26 +549,34 @@ class Application_cups(tk.Frame):
         self.option_spiked_no = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_spiked_no, command = self.spiked_no).grid(row = 2, column = 2, sticky = 'w')
         
     def spiked_yes(self):
+        """
+        Changing spiked standard file by specifying which cycle to end on, uploading altered spiked standard files
+        """
+        
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #altering spiked standard file
         tk.Label(dialog_frame, text = 'Enter last cycle # to be analyzed: ', font = ('TkDefaultFont', 10) ).grid(row = 0, column = 0, sticky = 'e')
         self.rowinput_spiked = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.rowinput_spiked.grid(row = 0, column = 1, sticky = 'w')
         self.rowinput_spiked.focus_set()
         
+        #uploading spiked standard file
         self.spiked_uploadbutton = tk.Button(dialog_frame, text = 'Upload concentrated spiked standard', font = ('TkDefaultFont', 10), command = self.file_spiked_upload_option).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_spiked_upload = tk.IntVar()
         self.CheckVar_spiked_upload.set(0)
         self.spiked_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_spiked_upload).grid(row = 1, column = 1, sticky = 'w')
         
+        #uploading spiked standard wash file
         self.spiked_wash_uploadbutton = tk.Button(dialog_frame, text = 'Upload concentrated spiked standard wash', command = self.file_spiked_wash_upload).grid(row = 2, column = 0, sticky = 'e')
         
         self.CheckVar_spiked_wash_upload = tk.IntVar()
         self.CheckVar_spiked_wash_upload.set(0)
         self.spiked_wash_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_spiked_wash_upload).grid(row = 2, column = 1, sticky = 'w')
         
+        #wash method
         tk.Label(dialog_frame, text = "Spiked standard wash run on: ", font = ('TkDefaultFont', 10) ).grid(row = 3, column = 0, sticky = 'w')
         
         self.CheckVar_Uwash_sem = tk.IntVar()
@@ -522,26 +587,35 @@ class Application_cups(tk.Frame):
         self.CheckVar_Uwash_cups.set(0)
         self.Uwash_cups_checkbutton= tk.Checkbutton(dialog_frame, text = "CUPS", font = ('TkDefaultFont', 10), variable = self.CheckVar_Uwash_cups, command = self.Uwash_cups).grid(row = 3, column = 1, sticky = 'e')
         
+        #run Cups standard calculation
         self.standard = tk.Button(dialog_frame, text = 'Calculate Standard', default = 'active', font = ('TkDefaultFont', 10), command = self.standard).grid(row = 4, column = 1, sticky = 'w')
         
+        #quit
         self.quit = tk.Button(dialog_frame, text="QUIT", font = ('TkDefaultFont', 10), command= self.quit_program).grid(row = 4, column = 2, sticky = 'w')
     
     def spiked_no(self):
+        """
+        Uploading unaltered spiked standard files
+        """
+        
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
+        #uploading spiked standard file
         self.spiked_uploadbutton = tk.Button(dialog_frame, text = 'Upload concentrated spiked standard', font = ('TkDefaultFont', 10), command = self.file_spiked_upload).grid(row = 0, column = 0, sticky = 'e')
         
         self.CheckVar_spiked_upload = tk.IntVar()
         self.CheckVar_spiked_upload.set(0)
         self.spiked_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_spiked_upload).grid(row = 0, column = 1, sticky = 'w')
         
+        #uploading spiked standard wash file
         self.spiked_wash_uploadbutton = tk.Button(dialog_frame, text = 'Upload concentrated spiked standard wash', font = ('TkDefaultFont', 10), command = self.file_spiked_wash_upload).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_spiked_wash_upload = tk.IntVar()
         self.CheckVar_spiked_wash_upload.set(0)
         self.spiked_wash_upload_checkbutton = tk.Checkbutton(dialog_frame, text = 'Uploaded', font = ('TkDefaultFont', 10), variable = self.CheckVar_spiked_wash_upload).grid(row = 1, column = 1, sticky = 'w')
         
+        #wash method
         tk.Label(dialog_frame, text = "Spiked standard wash run on: ", font = ('TkDefaultFont', 10) ).grid(row = 2, column = 0, sticky = 'w')
         
         self.CheckVar_Uwash_sem = tk.IntVar()
@@ -552,19 +626,29 @@ class Application_cups(tk.Frame):
         self.CheckVar_Uwash_cups.set(0)
         self.Uwash_cups_checkbutton= tk.Checkbutton(dialog_frame, text = "CUPS", font = ('TkDefaultFont', 10), variable = self.CheckVar_Uwash_cups, command = self.Uwash_cups).grid(row = 2, column = 1, sticky = 'e')
         
+        #run Cups standard calculation
         self.standard = tk.Button(dialog_frame, text = 'Calculate Standard', font = ('TkDefaultFont', 10), default = 'active', command = self.standard).grid(row = 3, column = 1, sticky = 'w')
         
+        #quit
         self.quit = tk.Button(dialog_frame, text="QUIT", font = ('TkDefaultFont', 10), command= self.quit_program).grid(row = 3, column = 2, sticky = 'w')
     
     def quit_program(self):
-        
+        """
+        Window destroy
+        """
         self.master.destroy()
         root.quit()
         
     def Uwash_cups(self):
+        """
+        Cups U wash method 
+        """
         self.Uwash = "cups"
     
     def Uwash_sem(self):
+        """
+        SEM U wash mthod
+        """
         self.Uwash = "sem"
         
     def file_unspiked_upload_option(self):
@@ -693,7 +777,7 @@ class Application_cups(tk.Frame):
     
     def standard(self):
         """
-        Standard function. Runs first the unspiked standard function followed by the concentrated spike standard run.
+        Run standard functionfor Cups. Runs first the unspiked standard function followed by the concentrated spike standard run.
         """
         
         self.unspiked_standard()
@@ -703,91 +787,6 @@ class Application_cups(tk.Frame):
         """
         Function for calculating 237 tail values from unspiked standard run
         """
-        
-        spike_input = self.spikeinput.get()
-        spike = spike_input
-    
-        #derives spike value based off dictionary entries
-        spike_six_three_dictionary = {"DIII-B":1.008398,"DIII-A": 1.008398,"1I":1.010128,"1H":1.010128}
-        spike_six_three_err_dictionary = {"DIII-B": 0.00015, "DIII-A": 0.00015, "1I": 0.00015, "1H": 0.00015}
-        spike_three_dictionary = {"DIII-B": 0.78938, "DIII-A": 0.78933, "1I": 0.61351, "1H": 0.78997}
-        spike_three_err_dictionary = {"DIII-B": 0.00002, "DIII-A": 0.00002, "1I": 0.00002, "1H": 0.00002}
-        spike_nine_dictionary = {"DIII-B": 0.21734, "DIII-A": 0.21705, "1I": 0.177187, "1H": 0.22815}
-        spike_nine_err_dictionary = {"DIII-B": 0.00001, "DIII-A": 0.00002, "1I": 0.00001, "1H": 0.00001}
-        spike_zero_nine_dictionary = {"DIII-B": 0.0000625, "DIII-A": 0.0000625, "1I": 0.0000402, "1H": 0.0000402}
-        spike_zero_nine_err_dictionary = {"DIII-B": 0.000003, "DIII-A": 0.000003, "1I": 0.0000011, "1H": 0.0000011}
-        spike_nine_two_dictionary = {"DIII-B": 0.00, "DIII-A": 0.00, "1I": 0.00, "1H": 0.00}
-        spike_nine_two_err_dictionary = {"DIII-B": 0.00, "DIII-A": 0.00, "1I": 0.00, "1H": 0.00}
-        spike_four_three_dictionary = {"DIII-B": 0.003195, "DIII-A": 0.003195, "1I":0.003180, "1H": 0.003180}
-        spike_four_three_err_dictionary= {"DIII-B": 0.000003, "DIII-A": 0.000003, "1I": 0.000003, "1H": 0.000003}
-        spike_five_three_dictionary = {"DIII-B": 0.10532, "DIII-A": 0.10532, "1I": 0.10521, "1H":0.10521}
-        spike_five_three_err_dictionary = {"DIII-B": 0.00003, "DIII-A": 0.00003, "1I": 0.00003, "1H": 0.00003}
-        spike_eight_three_dictionary = {"DIII-B": 0.01680, "DIII-A": 0.01680, "1I": 0.01700, "1H":0.01700 }
-        spike_eight_three_err_dictionary = {"DIII-B": 0.00001, "DIII-A": 0.00001,"1I": 0.00001, "1H": 0.00001}
-
-        if spike in spike_six_three_dictionary:
-            spike_six_three = float(spike_six_three_dictionary[spike]) #spike ratio
-        else: 
-            messagebox.showwarning("Error!", "No valid spike info entered! ")
-        
-        if spike in spike_six_three_err_dictionary: 
-            spike_six_three_err = float(spike_six_three_err_dictionary[spike]) #error of spike ratio
-            
-        if spike in spike_three_dictionary:
-            spike_three = float(spike_three_dictionary[spike]) #in pmol/g
-        else:pass
-    
-        if spike in spike_three_err_dictionary:
-            spike_three_err = float(spike_three_err_dictionary[spike]) #in pmol/g
-        else:pass
-    
-        if spike in spike_nine_dictionary:
-            spike_nine = float(spike_nine_dictionary[spike]) #in pmol/g
-        else: pass
-    
-        if spike in spike_nine_err_dictionary: 
-            spike_nine_err = float(spike_nine_err_dictionary[spike]) #in pmol/g
-        else: pass
-    
-        if spike in spike_zero_nine_dictionary:
-            spike_zero_nine = float(spike_zero_nine_dictionary[spike]) #spike ratio
-        else: pass
-    
-        if spike in spike_zero_nine_err_dictionary:
-            spike_zero_nine_err = float(spike_zero_nine_err_dictionary[spike]) #error of spike ratio
-        else: pass
-    
-        if spike in spike_nine_two_dictionary: 
-            spike_nine_two = float(spike_nine_two_dictionary[spike]) #spike ratio
-        else: pass
-    
-        if spike in spike_nine_two_err_dictionary:
-            spike_nine_two_err = float(spike_nine_two_err_dictionary[spike]) #error of spike ratio
-        else: pass
-    
-        if spike in spike_four_three_dictionary:
-            spike_four_three = float(spike_four_three_dictionary[spike]) #spike ratio
-        else: pass
-    
-        if spike in spike_four_three_err_dictionary:
-            spike_four_three_err = float(spike_four_three_err_dictionary[spike]) #error of spike ratio
-        else: pass
-            
-        if spike in spike_five_three_dictionary:
-            spike_five_three = float(spike_five_three_dictionary[spike]) #spike ratio
-        else: pass
-        
-        if spike in spike_five_three_err_dictionary:
-            spike_five_three_err = float(spike_five_three_err_dictionary[spike]) #error of spike ratio
-        else: pass
-        
-        if spike in spike_eight_three_dictionary:
-            spike_eight_three = float(spike_eight_three_dictionary[spike]) #spike ratio
-        else: pass
-        
-        if spike in spike_eight_three_err_dictionary:
-            spike_eight_three_err = float(spike_eight_three_err_dictionary[spike]) #error of spike ratio
-        else: pass
         
         #constants used
         three_wt = 233.039629
@@ -805,31 +804,31 @@ class Application_cups(tk.Frame):
         Unspiked standard wash values
         """
         
-        #233U
+        #233U wash
         unspiked_three_wash_working = isofilter(self.filename_unspiked_wash,"C", 44)
         unspiked_three_wash = unspiked_three_wash_working.getMean()
         if unspiked_three_wash < 0: unspiked_three_wash = 0.0
         unspiked_three_wash_err = abs( (2 * unspiked_three_wash_working.getStanddev()) / (unspiked_three_wash_working.getCounts())**0.5)
         
-        #233.5U
+        #233.5U wash
         unspiked_three_five_wash_working = isofilter(self.filename_unspiked_wash, "D", 44)
         unspiked_three_five_wash = unspiked_three_five_wash_working.getMean()
         if unspiked_three_five_wash < 0: unspiked_three_five_wash = 0.0
         unspiked_three_five_wash_err = abs( (2 * unspiked_three_five_wash_working.getStanddev()) / (unspiked_three_five_wash_working.getCounts())**0.5)
         
-        #234.5U
+        #234.5U wash
         unspiked_four_five_wash_working = isofilter(self.filename_unspiked_wash, "E", 44)
         unspiked_four_five_wash = unspiked_four_five_wash_working.getMean()
         if unspiked_four_five_wash < 0: unspiked_four_five_wash = 0.0
         unspiked_four_five_wash_err = abs( (2 * unspiked_four_five_wash_working.getStanddev()) / (unspiked_four_five_wash_working.getCounts())**0.5)
         
-        #236U
+        #236U wash
         unspiked_six_wash_working = isofilter(self.filename_unspiked_wash, "F", 44)
         unspiked_six_wash = unspiked_six_wash_working.getMean()
         if unspiked_six_wash < 0: unspiked_six_wash = 0.0
         unspiked_six_wash_err = abs( (2 * unspiked_six_wash_working.getStanddev()) / (unspiked_six_wash_working.getCounts())**0.5)
         
-        #237U
+        #237U wash
         unspiked_seven_wash_working = isofilter(self.filename_unspiked_wash, "G", 44)
         unspiked_seven_wash = unspiked_seven_wash_working.getMean()
         if unspiked_seven_wash < 0: unspiked_seven_wash = 0
@@ -885,14 +884,18 @@ class Application_cups(tk.Frame):
         unspiked_six_seven_err = abs( (2 * unspiked_six_seven_working.getStanddev()) / (unspiked_six_seven_working.getCounts()) ** 0.5 )
         
         """
-        Unspiked blank corrected tail values
+        Unspiked machine blank corrected tail values
         """
+        #233/237 mb corrected
         unspiked_three_seven_blankcorr = unspiked_three_seven - ((unspiked_three_wash/unspiked_seven)/(1 - (unspiked_seven_wash/unspiked_seven) ))
         
+        #233/235 mb corrected
         unspiked_three_five_seven_blankcorr = unspiked_three_five_seven - ((unspiked_three_five_wash/unspiked_seven)/(1 - (unspiked_seven_wash/unspiked_seven) ))
         
+        #234/235 mb corrected
         unspiked_four_five_seven_blankcorr = unspiked_four_five_seven - ((unspiked_four_five_wash/unspiked_seven)/(1 - (unspiked_seven_wash/unspiked_seven) ))
         
+        #236/237 mb corrected
         unspiked_six_seven_blankcorr = unspiked_six_seven - ((unspiked_six_wash/unspiked_seven)/(1 - (unspiked_seven_wash/unspiked_seven) ))
         
         """
@@ -900,7 +903,7 @@ class Application_cups(tk.Frame):
         """
         
         #2s relative errors (int)
-            
+        
         three_2s_rel_err = max((unspiked_three_seven_err/unspiked_three_seven), (unspiked_three_wash/unspiked_three))
         
         three_five_2s_rel_err = max((unspiked_three_five_seven_err/unspiked_three_five_seven), (unspiked_three_five_wash/unspiked_three_five))
@@ -912,11 +915,11 @@ class Application_cups(tk.Frame):
         #Max tails
         
         three_max_tail = unspiked_three_seven_blankcorr * (1 + three_2s_rel_err)
-        
+         
         three_five_max_tail = unspiked_three_five_seven_blankcorr * (1 + three_five_2s_rel_err)
         
         four_five_max_tail = unspiked_four_five_seven_blankcorr * (1 + four_five_2s_rel_err)
-        
+    
         six_max_tail = unspiked_six_seven_blankcorr * (1 + six_2s_rel_err)
         
         #Min tails
@@ -971,7 +974,7 @@ class Application_cups(tk.Frame):
         six_max_corr_tail = b_max * (m_max ** six_wt)
         
         #Min corrected tails
-    
+        
         three_min_corr_tail = b_min * (m_min ** three_wt)
         
         three_five_min_corr_tail = b_min * (m_min ** three_five_wt)
@@ -1012,7 +1015,7 @@ class Application_cups(tk.Frame):
         
         four_five_seven_tail = unspiked_four_five_seven_blankcorr
         
-        self.five_seven_tail = five_max_corr_tail #why not the same as 234/237 tail calc?
+        self.five_seven_tail = five_max_corr_tail 
         
         self.six_seven_tail = unspiked_six_seven_blankcorr
         
@@ -1030,7 +1033,7 @@ class Application_cups(tk.Frame):
         
         six_2s_rel_err_corr = six_2s_rel_err
         
-        #Final error
+        #Final tail errors
         
         self.three_seven_err = self.three_seven_tail * max(three_2s_rel_err_corr, 0.05)
         
@@ -1159,7 +1162,8 @@ class Application_cups(tk.Frame):
         """
         int_time_234 = 1.049
         int_time_other = 0.262 #233, 235, 236, 237, 238
-            
+        
+        #machine blank calculation for Uwash run on SEM
         if self.Uwash == "sem":
         
             #233 
@@ -1202,6 +1206,7 @@ class Application_cups(tk.Frame):
             eight_mb = four_mb / four_eight_mb
             eight_mb_err = eight_mb * (four_eight_mb_err/four_eight_mb)
         
+        #machine blank calculation for Uwash run on Cups
         elif self.Uwash == "cups":
             
             #233 
@@ -1281,7 +1286,7 @@ class Application_cups(tk.Frame):
         eight_beam_rel_err = 2 / np.sqrt(eight_beam_cps * working_eight_beam.getCounts() * int_time) * 1000
         
         """
-        Measured ratios and corrected errors and arrays
+        Measured ratios, errors, and arrays
         """
         
         #234/233 measured ratio
@@ -1332,7 +1337,6 @@ class Application_cups(tk.Frame):
         drift_array = isocorrection().drift_correction_offset(four_array, four_three_array)
         four_three_drift_corrected_array = isocorrection().drift_correction(drift_array, three_array)
         
-        
         four_three_drift_corrected_err = max( (2 * np.nanstd(a = four_three_drift_corrected_array, ddof = 1)/ np.sqrt(len(four_three_drift_corrected_array[np.logical_not(np.isnan(four_three_drift_corrected_array))]))),
                                              (np.nanmean(four_three_drift_corrected_array) * np.sqrt(four_beam_rel_err**2)/(10**3)) )
         
@@ -1365,6 +1369,7 @@ class Application_cups(tk.Frame):
         seven_eight_mb_corrected_array = isocorrection().machine_blank_correction(isocorrection().array(self.filename_spiked, "M"), 
                                                        eight_beam_volts, eight_mb, seven_mb)
         
+        #AS for standard run
         AS_seven_eight = np.nanmean(seven_eight_mb_corrected_array)
         AS_seven_eight_err = np.sqrt(spiked_seven_eight_meas_err**2 + (seven_mb_err/three_beam_cps/(np.nanmean(eight_three_mb_corrected_array)))**2)
         
@@ -1523,7 +1528,7 @@ class plot_figure(tk.Tk):
     
     def __init__(self):
         """
-        Init def
+        Init def, no inputs needed
         """
       
     def plot_234(self, filename, column1, column2): 
@@ -1554,7 +1559,10 @@ class isofilter():
     """
     Class for calculating unfiltered and filtered mean, standdev/error, and counts for an Excel column
     """
-    def __init__(self, filename, columnletter, filternumber): # input filename and columnletter as strings
+    def __init__(self, filename, columnletter, filternumber): 
+        """
+        Loads specified Excel column
+        """
         self.column = str(columnletter)+'{}:'+str(columnletter)+'{}'
         self.filename = str(filename)
         self.filternumber = int(filternumber)
@@ -1748,7 +1756,6 @@ class isocorrection():
         """
         Code provides output array for excel row. Includes NaN for non-values
         """
-        
         self.column = str(columnletter)+'{}:'+str(columnletter)+'{}'
         self.filename = str(filename)
         self.workbook = openpyxl.load_workbook(self.filename, data_only = True)
@@ -1909,6 +1916,9 @@ root = tk.Tk()
 app = Application(master=root)
 
 def on_closing():
+    """
+    If window is X'ed out of, prompts you to quit 
+    """
     if messagebox.askokcancel("Quit", "Do you want to quit?"):
         root.destroy()
         root.quit()

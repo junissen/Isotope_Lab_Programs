@@ -28,12 +28,16 @@ class Application(tk.Frame):
     """
     
     def __init__(self, master):
+        """
+        Initiates Tkinter window for importing reagent blank information
+        """
         tk.Frame.__init__(self,master)
         self.dialog_frame_top = tk.Frame(self)
         self.dialog_frame_top.pack()
         tk.Label(self.dialog_frame_top, text = "Welcome to the Chemblank Calculation Program!", font = ('TkDefaultFont', 10)  ).grid(row = 0, column = 0, sticky = 'e')
         self.master.title("ChemBlank Calculator")
         
+        #assigns preset values for spike 233 and spike 229 concentrations. If these are unchanged, values from spike dictionary will be used
         global preset_values
         preset_values = [0.0, 0.0]
         
@@ -41,12 +45,15 @@ class Application(tk.Frame):
         self.pack()
         
     def create_widgets(self):
+        """
+        Prompts whether to change spike concentration values (233 pmol/g and 229 pmol/g)
+        """
         
         dialog_frame = tk.Frame(self)
         dialog_frame.pack()
         
         tk.Label(dialog_frame, text = "Would you like to change spike conc values?", font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'w')
-        
+    
         self.CheckVar_preset_yes = tk.IntVar()
         self.CheckVar_preset_yes.set(0)
         self.option_preset_yes = tk.Checkbutton(dialog_frame, text = 'Yes', font = ('TkDefaultFont', 10), variable = self.CheckVar_preset_yes, command = self.preset_change).grid(row = 0, column = 1, sticky = 'w')
@@ -60,6 +67,7 @@ class Application(tk.Frame):
         creates manual entry windows for blank name, spike info, spike weight, U weight, Th weight, uptake rate, ionization efficiency
         and chemblank export file name
         """
+        
         self.dialog_frame = tk.Frame(self)
         self.dialog_frame.pack()
         
@@ -93,24 +101,25 @@ class Application(tk.Frame):
         self.Th_wt.grid(row = 4, column = 1, sticky = 'w')
         self.Th_wt.focus_set()
         
-        #Uptake rate
+        #uptake rate
         tk.Label(self.dialog_frame, text = "Enter uptake rate:  ", font = ('TkDefaultFont', 10) ).grid(row = 5, column = 0, sticky = 'w')
         self.uptake_rate = tk.Entry(self.dialog_frame, background = 'white', width = 12)
         self.uptake_rate.grid(row = 5, column = 1, sticky = 'w')
         self.uptake_rate.focus_set()
         
-        #Ionization efficiency
+        #Iionization efficiency
         tk.Label(self.dialog_frame, text = "Enter ionization efficiency:  ", font = ('TkDefaultFont', 10) ).grid(row = 6, column = 0, sticky = 'w')
         self.IE = tk.Entry(self.dialog_frame, background = 'white', width = 12)
         self.IE.grid(row = 6, column = 1, sticky = 'w')
         self.IE.focus_set()
         
-        #Chemblank filename
+        #chemblank filename
         tk.Label(self.dialog_frame, text = "Enter chemblank export file name (include .xlsx):  ", font = ('TkDefaultFont', 10) ).grid(row = 7, column = 0, sticky = 'w')
         self.filename = tk.Entry(self.dialog_frame, background = 'white', width = 12)
         self.filename.grid(row = 7, column = 1, sticky = 'w')
         self.filename.focus_set()
         
+        #option of altering Th method
         tk.Label(self.dialog_frame, text = 'Would you like to alter your Th method file before running?: ', font = ('TkDefaultFont', 10) ).grid(row = 8, column = 0, sticky = 'w')
         
         self.CheckVar_th_yes = tk.IntVar()
@@ -122,27 +131,34 @@ class Application(tk.Frame):
         self.th_no = tk.Checkbutton(self.dialog_frame, text = 'No', font = ('TkDefaultFont', 10) , variable = self.CheckVar_th_no, command = self.th_no).grid(row = 8, column = 1, sticky = 'e')
         
     def th_yes(self):
+        """
+        Changing Th file by specifying which cycle to end on, uploading altered Th files
+        """
         
         checkbutton_frame = tk.Frame(self)
         checkbutton_frame.pack()
         
+        #altering Th file
         tk.Label(checkbutton_frame, text = 'Enter last cycle # to be analyzed: ', font = ('TkDefaultFont', 10) ).grid(row = 0, column = 0, sticky = 'e')
         self.rowinput_th = tk.Entry(checkbutton_frame, background = 'white', width = 12)
         self.rowinput_th.grid(row = 0, column = 1, sticky = 'w')
         self.rowinput_th.focus_set()
       
+        #uploading Th file        
         self.th_chemblank_upload = tk.Button(checkbutton_frame, text = 'Upload Th chem blank file', font = ('TkDefaultFont', 10) , command = self.file_upload_th_chemblank_option).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_th_chemblank = tk.IntVar()
         self.CheckVar_th_chemblank.set(0)
         self.th_chemblank_checkbutton = tk.Checkbutton(checkbutton_frame, text = 'Uploaded', font = ('TkDefaultFont', 10) , variable = self.CheckVar_th_chemblank).grid(row = 1, column = 1, sticky = 'w')
         
+        #uploading Th wash file
         self.th_chemblankwash_upload = tk.Button(checkbutton_frame, text = 'Upload Th chem blank wash file', font = ('TkDefaultFont', 10) , command = self.file_upload_th_chemblankwash).grid(row = 2, column = 0, sticky = 'e')
         
         self.CheckVar_th_chemblankwash = tk.IntVar()
         self.CheckVar_th_chemblankwash.set(0)
         self.th_chemblankwash_checkbutton = tk.Checkbutton(checkbutton_frame, text = 'Uploaded', font = ('TkDefaultFont', 10) , variable = self.CheckVar_th_chemblankwash).grid(row = 2, column = 1, sticky = 'w')
         
+        #option of altering U file
         tk.Label(checkbutton_frame, text = 'Would you like to alter your U method file before running?: ', font = ('TkDefaultFont', 10) ).grid(row = 3, column = 0, sticky = 'w')
         
         self.CheckVar_u_yes = tk.IntVar()
@@ -154,22 +170,28 @@ class Application(tk.Frame):
         self.u_no = tk.Checkbutton(checkbutton_frame, text = 'No', font = ('TkDefaultFont', 10) , variable = self.CheckVar_u_no, command = self.u_no).grid(row = 3, column = 1, sticky = 'e')
     
     def th_no(self):
+        """
+        Uploading unaltered Th files
+        """
         
         checkbutton_frame = tk.Frame(self)
         checkbutton_frame.pack()
         
+        #uploading Th file
         self.th_chemblank_upload = tk.Button(checkbutton_frame, text = 'Upload Th chem blank file', font = ('TkDefaultFont', 10) , command = self.file_upload_th_chemblank).grid(row = 0, column = 0, sticky = 'e')
         
         self.CheckVar_th_chemblank = tk.IntVar()
         self.CheckVar_th_chemblank.set(0)
         self.th_chemblank_checkbutton = tk.Checkbutton(checkbutton_frame, text = 'Uploaded', font = ('TkDefaultFont', 10) , variable = self.CheckVar_th_chemblank).grid(row = 0, column = 1, sticky = 'w')
         
+        #uploading Th wash file
         self.th_chemblankwash_upload = tk.Button(checkbutton_frame, text = 'Upload Th chem blank wash file', font = ('TkDefaultFont', 10) , command = self.file_upload_th_chemblankwash).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_th_chemblankwash = tk.IntVar()
         self.CheckVar_th_chemblankwash.set(0)
         self.th_chemblankwash_checkbutton = tk.Checkbutton(checkbutton_frame, text = 'Uploaded', font = ('TkDefaultFont', 10) , variable = self.CheckVar_th_chemblankwash).grid(row = 1, column = 1, sticky = 'w')
         
+        #option of altering U file
         tk.Label(checkbutton_frame, text = 'Would you like to alter your U method file before running?: ', font = ('TkDefaultFont', 10) ).grid(row = 2, column = 0, sticky = 'w')
         
         self.CheckVar_u_yes = tk.IntVar()
@@ -181,52 +203,71 @@ class Application(tk.Frame):
         self.u_no = tk.Checkbutton(checkbutton_frame, text = 'No', font = ('TkDefaultFont', 10) , variable = self.CheckVar_u_no, command = self.u_no).grid(row = 2, column = 2, sticky = 'w')       
     
     def u_yes(self):
+        """
+        Changing U file by specifying which cycle to end on, uploading altered U files
+        """
+        
         checkbutton_frame = tk.Frame(self)
         checkbutton_frame.pack()
         
+        #altering U file
         tk.Label(checkbutton_frame, text = 'Enter last cycle # to be analyzed: ', font = ('TkDefaultFont', 10) ).grid(row = 0, column = 0, sticky = 'e')
         self.rowinput_u = tk.Entry(checkbutton_frame, background = 'white', width = 12)
         self.rowinput_u.grid(row = 0, column = 1, sticky = 'w')
         self.rowinput_u.focus_set()
-      
+        
+        #uploading U file
         self.u_chemblank_upload = tk.Button(checkbutton_frame, text = 'Upload U chem blank file', font = ('TkDefaultFont', 10) , command = self.file_upload_u_chemblank_option).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_u_chemblank = tk.IntVar()
         self.CheckVar_u_chemblank.set(0)
         self.u_chemblank_checkbutton = tk.Checkbutton(checkbutton_frame, text = 'Uploaded', font = ('TkDefaultFont', 10) , variable = self.CheckVar_u_chemblank).grid(row = 1, column = 1, sticky = 'w')
         
+        #uploading U wash file
         self.u_chemblankwash_upload = tk.Button(checkbutton_frame, text = 'Upload U chem blank wash file', font = ('TkDefaultFont', 10) , command = self.file_upload_u_chemblankwash).grid(row = 2, column = 0, sticky = 'e')
         
         self.CheckVar_u_chemblankwash = tk.IntVar()
         self.CheckVar_u_chemblankwash.set(0)
         self.u_chemblankwash_checkbutton = tk.Checkbutton(checkbutton_frame, text = 'Uploaded', font = ('TkDefaultFont', 10) , variable = self.CheckVar_u_chemblankwash).grid(row = 2, column = 1, sticky = 'w')
-                
+        
+        #run chemblank calculation         
         self.chemblank = tk.Button(checkbutton_frame, text = 'Calculate chemblank and export data', font = ('TkDefaultFont', 10) , command = self.blank_calculate, default = 'active').grid(row = 3, column = 1, sticky = 'w')
         
+        #quit
         self.quit = tk.Button(checkbutton_frame, text="QUIT", font = ('TkDefaultFont', 10) , command= self.quit_program).grid(row = 3, column = 2, sticky = 'w')
     
     def u_no(self):
+        """
+        Uploading unaltered U files
+        """
         
         checkbutton_frame = tk.Frame(self)
         checkbutton_frame.pack()     
         
+        #uploading U file
         self.u_chemblank_upload = tk.Button(checkbutton_frame, text = 'Upload U chem blank file', font = ('TkDefaultFont', 10) , command = self.file_upload_u_chemblank).grid(row = 0, column = 0, sticky = 'e')
         
         self.CheckVar_u_chemblank = tk.IntVar()
         self.CheckVar_u_chemblank.set(0)
         self.u_chemblank_checkbutton = tk.Checkbutton(checkbutton_frame, text = 'Uploaded', font = ('TkDefaultFont', 10) , variable = self.CheckVar_u_chemblank).grid(row = 0, column = 1, sticky = 'w')
         
+        #uploading U wash file
         self.u_chemblankwash_upload = tk.Button(checkbutton_frame, text = 'Upload U chem blank wash file', font = ('TkDefaultFont', 10) , command = self.file_upload_u_chemblankwash).grid(row = 1, column = 0, sticky = 'e')
         
         self.CheckVar_u_chemblankwash = tk.IntVar()
         self.CheckVar_u_chemblankwash.set(0)
         self.u_chemblankwash_checkbutton = tk.Checkbutton(checkbutton_frame, text = 'Uploaded', font = ('TkDefaultFont', 10) , variable = self.CheckVar_u_chemblankwash).grid(row = 1, column = 1, sticky = 'w')
-                
+        
+        #run chemblank calculation        
         self.chemblank = tk.Button(checkbutton_frame, text = 'Calculate chemblank and export data', font = ('TkDefaultFont', 10) , command = self.blank_calculate, default = 'active').grid(row = 2, column = 1, sticky = 'w')
         
+        #quit
         self.quit = tk.Button(checkbutton_frame, text="QUIT", font = ('TkDefaultFont', 10) , command= self.quit_program).grid(row = 2, column = 2, sticky = 'w')
     
     def preset_change(self):
+        """
+        Runs function to change preset values for 233 and 229 spike concentration
+        """
         
         """
         preset values refer to the following:
@@ -238,6 +279,9 @@ class Application(tk.Frame):
         Application_preset(self)
         
     def show(self):
+        """
+        Returns to main window after changing spike preset values and continues to parameter_input()
+        """
         
         self.master.update()
         self.master.deiconify()
@@ -245,6 +289,9 @@ class Application(tk.Frame):
         self.parameter_input()
         
     def quit_program(self):
+        """
+        Window destroy
+        """
         
         self.master.destroy()
         root.quit()
@@ -298,7 +345,6 @@ class Application(tk.Frame):
         """
     
         filename_raw = filedialog.askopenfilename(parent=self)
-        #self.filename_th_chemblankwash = filename_raw
         try:
             filename_th_chemblankwash = openpyxl.Workbook()
             ws = filename_th_chemblankwash.worksheets[0]
@@ -321,7 +367,6 @@ class Application(tk.Frame):
         """
     
         filename_raw = filedialog.askopenfilename(parent=self)
-        #self.filename_u_chemblank = filename_raw
         try:
             filename_u_chemblank = openpyxl.Workbook()
             ws = filename_u_chemblank.worksheets[0]
@@ -344,7 +389,6 @@ class Application(tk.Frame):
         """
     
         filename_raw = filedialog.askopenfilename(parent=self)
-        #self.filename_u_chemblank = filename_raw
         try:
             filename_u_chemblank = openpyxl.Workbook()
             ws = filename_u_chemblank.worksheets[0]
@@ -367,7 +411,6 @@ class Application(tk.Frame):
         """
     
         filename_raw = filedialog.askopenfilename(parent=self)
-        #self.filename_u_chemblankwash = filename_raw
         try:
             filename_u_chemblankwash = openpyxl.Workbook()
             ws = filename_u_chemblankwash.worksheets[0]
@@ -419,6 +462,7 @@ class Application(tk.Frame):
         if spike in spike_six_three_err_dictionary: 
             self.spike_six_three_err = float(spike_six_three_err_dictionary[spike]) #error of spike ratio
         
+        #if spike 233 concentration has been changed, uses input value. Otherwise uses spike dictionary value
         if preset_values[0] == 0.0:
             if spike in spike_three_dictionary:
                 self.spike_three = float(spike_three_dictionary[spike]) #in pmol/g
@@ -429,6 +473,7 @@ class Application(tk.Frame):
             self.spike_three_err = float(spike_three_err_dictionary[spike]) #in pmol/g
         else:pass
     
+        #if spike 233 concentration has been changed, multiplies input value by spike 233/229 ratio. Otherwises uses spike dictionary value
         if preset_values[1] == 1.0:
             if spike in spike_three_nine_dictionary:
                 self.spike_nine = float(spike_three_nine_dictionary[spike]) * self.spike_three
@@ -548,6 +593,7 @@ class Application(tk.Frame):
         """
         U wash and chem blank values
         """
+        #two options for U wash and U chem blank values in case 232Th was not included in method file
         
         wb_Uwash = openpyxl.load_workbook(self.filename_u_chemblankwash)
         ws_Uwash = wb_Uwash.worksheets[0]
@@ -783,25 +829,36 @@ class Application(tk.Frame):
         
         eight_three_corr_spike_err = np.sqrt((eight_three * eight_three_err)**2 + (self.spike_eight_three * eight_three_spike_err)**2)/ abs(eight_three_corr_spike)
         
-        #chemistry yields
-        th_yield = ((nine[0] - nine_wash[0])/( (self.spike_nine_used/(10**12)) * (6.022E23) * self.IE * (self.uptake_rate/1000) * (1/self.Th_wt))) * 100 #in %
-        u_yield = ((six[0] - six_wash[0])/( (self.spike_three_used * self.spike_six_three/(10**12)) * (6.022E23) * self.IE * (self.uptake_rate/1000) * (1/self.U_wt))) * 100 #in %
+        """
+        Chemistry yields in %
+        """
         
-        #chemblank values
+        th_yield = ((nine[0] - nine_wash[0])/( (self.spike_nine_used/(10**12)) * (6.022E23) * self.IE * (self.uptake_rate/1000) * (1/self.Th_wt))) * 100 
+        u_yield = ((six[0] - six_wash[0])/( (self.spike_three_used * self.spike_six_three/(10**12)) * (6.022E23) * self.IE * (self.uptake_rate/1000) * (1/self.U_wt))) * 100 
         
-        zero_chemblank = ((self.spike_nine_used * zero_nine_corr_spike)/(10**12))* self.wt_230 * (10**18) #in ag
+        
+        """
+        Chemistry blank values in grams
+        """
+        
+        #230 chemblank ag
+        zero_chemblank = ((self.spike_nine_used * zero_nine_corr_spike)/(10**12))* self.wt_230 * (10**18) 
         zero_chemblank_err = abs(zero_chemblank * zero_nine_corr_spike_err)
-            
-        two_chemblank = ((self.spike_nine_used / nine_two_corr_spike)/(10**12))* self.wt_232 * (10**15) #in fg
+        
+        #232 chemblank fg
+        two_chemblank = ((self.spike_nine_used / nine_two_corr_spike)/(10**12))* self.wt_232 * (10**15)
         two_chemblank_err = abs(two_chemblank * nine_two_corr_spike_err)
-            
-        four_chemblank = ((self.spike_three_used * four_three_corr_spike)/(10**12))* self.wt_234 * (10**18) #in ag
+        
+        #234 chemblank ag
+        four_chemblank = ((self.spike_three_used * four_three_corr_spike)/(10**12))* self.wt_234 * (10**18) 
         four_chemblank_err = abs(four_chemblank * four_three_corr_spike_err)
-            
-        five_chemblank = ((self.spike_three_used * five_three_corr_spike)/(10**12))* self.wt_235 * (10**15) #in fg
+        
+        #235 chemblank fg
+        five_chemblank = ((self.spike_three_used * five_three_corr_spike)/(10**12))* self.wt_235 * (10**15) 
         five_chemblank_err = abs(five_chemblank * five_three_corr_spike_err)
-            
-        eight_chemblank = ((self.spike_three_used * eight_three_corr_spike)/(10**12))* self.wt_238 * (10**15) #in fg
+        
+        #238 chemblank fg
+        eight_chemblank = ((self.spike_three_used * eight_three_corr_spike)/(10**12))* self.wt_238 * (10**15) 
         eight_chemblank_err = abs(eight_chemblank * eight_three_corr_spike_err)
         
         data = {'1_Chemblank': pd.Series([self.blank_name, "Run info"],index = ['1_fileinfo', '6_param']),
@@ -823,13 +880,19 @@ class Application(tk.Frame):
         
         messagebox.showinfo("Chemblank data file saved ! ", "Chemblank data file name: "+ str(self.filename))
         
+        #plots 234 and 230 beam to check for beam stability
         wb = plot_figure(self.four_beam_array, self.index_array_U, self.zero_beam_array, self.index_array_Th)
         
         wb.plot_fig()
         
 class chem_blank():
-    
-        def __init__(self,filename, columnletter, int_time):
+        """
+        Class for analyzing ICP-MS files
+        """
+        def __init__(self,filename, columnletter, int_time): 
+            """
+            Uploads column from specified file 
+            """
             self.column = str(columnletter)+'{}:'+str(columnletter)+'{}'
             self.filename = str(filename)
             self.workbook = openpyxl.load_workbook(self.filename)
@@ -846,7 +909,7 @@ class chem_blank():
                       
         def calc(self):
             """
-            Code calculates the mean, total cycles, and 2s counting statistics error of chem blanks
+            Code calculates the mean, total cycles, and 2s counting statistics error of Excel column
             """
             outlist = []
             outcounts = 0
@@ -879,7 +942,7 @@ class chem_blank():
         
         def array(self):
             """
-            Code provides output array for excel row. Includes NaN for non-values
+            Code provides output array for Excel row. Includes NaN for non-values
             """
             outlist = []
             for row in self.ws.iter_rows(self.column.format(2, self.ws.max_row - 8)):
@@ -897,6 +960,7 @@ class chem_blank():
             outarray = np.array(outlist, dtype = np.float)
             return outarray
         
+        
 class plot_figure(tk.Tk):
     """
     Provides plot of 234U and 230Th beam stability
@@ -913,7 +977,7 @@ class plot_figure(tk.Tk):
       
     def plot_fig(self): 
         """
-        plot of 234U beam
+        plot of 234U and 230Th beam
         """
         toplevel = tk.Toplevel()
         toplevel.title("Beam intensity")
@@ -951,9 +1015,13 @@ class plot_figure(tk.Tk):
         toplevel.mainloop()
 
 class Application_preset(tk.Toplevel):
-    
+    """
+    Tkinter class for changing preset values
+    """
     def __init__(self, original):
-        #tk.Toplevel.__init__(self)
+        """
+        Opens new Tkinter window if you have chosen to change your spike concentration values
+        """
         self.original_frame = original
         self.otherframe = tk.Toplevel()
         self.otherframe.protocol("WM_DELETE_WINDOW", on_closing)
@@ -966,10 +1034,14 @@ class Application_preset(tk.Toplevel):
         self.spike_conc_option()
         
     def spike_conc_option(self):
+        """
+        Option for changing 233U concentration of spike
+        """
         
         dialog_frame = tk.Frame(self.otherframe)
         dialog_frame.pack()
         
+        #option for changing 233U concentration
         tk.Label(dialog_frame, text = "Would you like to change the 233U concentration of your spike?", font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'w')
         
         self.CheckVar_spike_yes = tk.IntVar()
@@ -981,20 +1053,28 @@ class Application_preset(tk.Toplevel):
         self.CheckVar_spike_no = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_spike_no, command = self.spike_no).grid(row = 0, column = 2, sticky = 'e')
         
     def spike_yes(self):
+        """
+        Prompt for changing 233U concentration and submit 
+        """
         
         self.spike_yes = 1
         
         dialog_frame = tk.Frame(self.otherframe)
         dialog_frame.pack()
         
+        #spike 233U concentration
         tk.Label(dialog_frame, text = "Enter 233U concentration in pmol/g:", font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'w')
         self.spike_conc_three = tk.Entry(dialog_frame, background = 'white', width = 12)
         self.spike_conc_three.grid(row = 0, column = 1, sticky = 'w')
         self.spike_conc_three.focus_set()
         
+        #submit value 
         self.submit_button = tk.Button(dialog_frame, text = "Submit", font = ('TkDefaultFont', 10), default = "active", command = self.click_submit).grid(row = 1, column = 0)
     
     def spike_no(self):
+        """
+        Submit
+        """
         
         dialog_frame = tk.Frame(self.otherframe)
         dialog_frame.pack()
@@ -1002,7 +1082,12 @@ class Application_preset(tk.Toplevel):
         self.submit_button = tk.Button(dialog_frame, text = "Submit", font = ('TkDefaultFont', 10), default = "active", command = self.click_submit).grid(row = 0, column = 0)
         
     def click_submit(self):
+        """
+        If spike concentration has been changed, updates 233U concentration in global preset values with input value. Updates 229 concentration 
+        with 1.0. If spike concentration has not been changed, global preset values remain the same. Returns to oroginal window
+        """
         
+        #changing spike preset values
         if self.spike_yes == 1:
             spike_conc_three = self.spike_conc_three.get()
             spike_conc_nine = 1.0
@@ -1010,10 +1095,14 @@ class Application_preset(tk.Toplevel):
             preset_values[0] = spike_conc_three
             preset_values[1] = spike_conc_nine
         
+        #return to original window
         self.otherframe.destroy()
         self.original_frame.show()
     
     def on_closing(self):
+        """
+        If secondary window is X'ed out of, prompts you to quit 
+        """
         if messagebox.askokcancel("Quit", "Do you want to quit?"):
             self.otherframe.destroy()       
             
@@ -1022,6 +1111,9 @@ root = tk.Tk()
 app = Application(master=root)
 
 def on_closing():
+    """
+    If primary window is X'ed out of, prompts you to quit 
+    """
     if messagebox.askokcancel("Quit", "Do you want to quit?"):
         root.destroy()
         root.quit()
