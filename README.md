@@ -1,9 +1,9 @@
 # Isotope_Lab_Programs
 Programs for reducing data run on MC-ICP-MS for U/Th dating using SEM and Cups methods
 
-##### Programs include calculation for chemistry blanks run on SEM methods and standards/age files run on either SEM or Cups methods. 
+##### Programs include calculation for chemistry and reagent blanks run on SEM methods and standards/age files run on either SEM or Cups methods. 
 
-Programs included are AgeCalculation.py, ChemBlankCalculation.py and StandardCalculation.py. Programs can also be accessed as an executable file for either Mac or PC, under the respective folders. To use, download the executable file and to verify proper functioning run *chmod +x "file extension"* in terminal window before running.
+Programs included are AgeCalculation.py, ChemBlankCalculation.py, ReagenBlankCalculation.py and StandardCalculation.py. Programs can also be accessed as an executable file for either Mac or PC, under the respective folders. To use, download the executable file and to verify proper functioning run *chmod +x "file extension"* in terminal window before running.
 
 Note: A chemblank file must be created using the ChemBlankCalculation program before running AgeCalculation on SEM or Cups. This program uses the output of the chemblank program in its calculuation. Additionally, a spiked standard 234/238 ratio must be calculated using StandardCalculation before running AgeCalculation on Cups. 
 
