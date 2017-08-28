@@ -1,6 +1,14 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
+Created on Mon Aug 28 15:40:40 2017
+
+@author: julianissen
+"""
+
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+"""
 Created on Tue Jul 18 11:23:56 2017
 
 @author: julianissen
@@ -34,7 +42,7 @@ class Application(tk.Frame):
         
         tk.Frame.__init__(self, master)
         
-        self.master.title("Age Calculator for Speleothems")
+        self.master.title("Age Calculator for Corals")
         self.dialog_frame_top = tk.Frame(self)
         self.dialog_frame_top.pack()
         tk.Label(self.dialog_frame_top, text = "Welcome to the Age Calculation Program!", font = ('TkDefaultFont', 10) ).grid(row = 0, column = 0, sticky = 'e')
@@ -1226,7 +1234,7 @@ class Application(tk.Frame):
         """
         preset values refer to the following:
             [0]: 233 spike concentration (0.0 will be replaced by spike specific value specified)
-            [1]: 229 spike concentration (0.0 will be replaced by 1.0 if 233 spike concentration changed)
+            [1]: 229 spike concentration (0.0 will be replaced by spike specific value specified)
             [2]: sample weight error
             [3]: spike weight error
             [4]: 230/232 initial value
@@ -1530,15 +1538,15 @@ class Application_sem():
         else: 
             self.spike_three = float(spike_conc_three)
         
-        if spike_conc_nine == 1.0:
+        if spike_conc_nine == 0.0:
             
-            if spike in spike_three_nine_dictionary:
-                self.spike_nine = float(spike_three_nine_dictionary[spike]) * self.spike_three
+            if spike in spike_nine_dictionary:
+                self.spike_nine = float(spike_nine_dictionary[spike]) 
             else: pass
         
         else:
             if spike in spike_nine_dictionary: 
-                self.spike_nine = float(spike_nine_dictionary[spike])
+                self.spike_nine = float(spike_conc_nine)
             else: pass
     
         if spike in spike_three_err_dictionary:
@@ -2384,6 +2392,7 @@ class Application_semcups():
                                   (1 - np.exp((self.lambda_234-self.lambda_230)*t)))))
         
         t_initial_guess = 0
+        
         corrected_t = fsolve(age_func_corrected_t, t_initial_guess)
         
         zero_two_initial_now = zero_two_initial * np.exp(-self.lambda_230 * corrected_t)
@@ -3138,7 +3147,7 @@ class unspiked_standard():
         self.six_seven_err = self.six_seven_tail * max(six_2s_rel_err_corr, 0.05)
         
         """
-        Optional message box for displaying unspiked tail values. Delete quotation marks to run.
+        #Optional message box for displaying unspiked tail values. Delete quotation marks to run.
         # message box 
         messagebox.showinfo( "UNSPIKED STANDARD TAIL VALUES: ",
         "\n233/237: " + str("{0:.4f}".format(self.three_seven_tail)) + " ± " + str("{0:.4f}".format(self.three_seven_err)) +\
@@ -3203,13 +3212,13 @@ class Calculation_forCups():
             self.spike_three_err = float(spike_three_err_dictionary[spike]) #in pmol/g
         else:pass
     
-        if spike_conc_nine == 1.0:
-            if spike in spike_three_nine_dictionary:
-                self.spike_nine = float(spike_three_nine_dictionary[spike]) * self.spike_three #in pmol/g
+        if spike_conc_nine == 0.0:
+            if spike in spike_nine_dictionary:
+                self.spike_nine = float(spike_nine_dictionary[spike]) #in pmol/g
             else: pass
         else:
             if spike in spike_nine_dictionary: 
-                self.spike_nine = float(spike_nine_dictionary[spike])
+                self.spike_nine = float(spike_conc_nine)
     
         if spike in spike_nine_err_dictionary: 
             self.spike_nine_err = float(spike_nine_err_dictionary[spike]) #in pmol/g
@@ -3369,7 +3378,7 @@ class Calculation_forCups():
             eight_mb_err = eight_mb * (four_eight_mb_err/four_eight_mb)
             
         elif Uwash_option == "cups":
-            
+        
             #233 
             working_three_mb = isofilter(self.filename_Uwash, "C")
             three_mb = working_three_mb.getMean() * 62422000
@@ -3400,6 +3409,7 @@ class Calculation_forCups():
             working_eight_mb = isofilter(self.filename_Uwash, "H")
             eight_mb = working_eight_mb.getMean() * 62422000
             eight_mb_err = (2 * working_eight_mb.getStanddev()/np.sqrt(working_eight_mb.getCounts())) * 6242000
+        
         
         """
         Measured beam intensities
@@ -3497,7 +3507,6 @@ class Calculation_forCups():
         four_three_array = isocorrection().array(self.filename_U, "I")
         drift_array = isocorrection().drift_correction_offset(four_array, four_three_array)
         four_three_drift_corrected_array = isocorrection().drift_correction(drift_array, three_array)
-        
         
         four_three_drift_corrected_err = max( (2 * np.nanstd(a = four_three_drift_corrected_array, ddof = 1)/ np.sqrt(len(four_three_drift_corrected_array[np.logical_not(np.isnan(four_three_drift_corrected_array))]))),
                                              (np.nanmean(four_three_drift_corrected_array) * np.sqrt(four_beam_rel_err**2)/(10**3)) )
@@ -5047,12 +5056,12 @@ class Application_preset(tk.Toplevel):
         
     def spike_conc_option(self):
         """
-        Option for changing 233U concentration of spike
+        Option for changing 233U and 229Th concentration of spike
         """
         dialog_frame = tk.Frame(self.otherframe)
         dialog_frame.pack()
         
-        tk.Label(dialog_frame, text = "Would you like to change the 233U concentration of your spike?", font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'w')
+        tk.Label(dialog_frame, text = "Would you like to change the 233U and 229Th concentration of your spike?", font = ('TkDefaultFont', 10)).grid(row = 0, column = 0, sticky = 'w')
         
         self.CheckVar_spike_yes = tk.IntVar()
         self.CheckVar_spike_yes.set(0)
@@ -5077,15 +5086,20 @@ class Application_preset(tk.Toplevel):
         self.spike_conc_three.grid(row = 0, column = 1, sticky = 'w')
         self.spike_conc_three.focus_set()
         
-        tk.Label(dialog_frame, text = "Would you like to change the sample wt error from 0.1 mg? ", font = ('TkDefaultFont', 10)).grid(row = 1, column = 0, sticky = 'w')
+        tk.Label(dialog_frame, text = "Enter 229Th concentration in pmol/g:", font = ('TkDefaultFont', 10)).grid(row = 1, column = 0, sticky = 'w')
+        self.spike_conc_nine = tk.Entry(dialog_frame, background = 'white', width = 12)
+        self.spike_conc_nine.grid(row = 1, column = 1, sticky = 'w')
+        self.spike_conc_nine.focus_set()
+        
+        tk.Label(dialog_frame, text = "Would you like to change the sample wt error from 0.1 mg? ", font = ('TkDefaultFont', 10)).grid(row = 2, column = 0, sticky = 'w')
         
         self.CheckVar_samplewt_yes = tk.IntVar()
         self.CheckVar_samplewt_yes.set(0)
-        self.CheckVar_samplewt_yes = tk.Checkbutton(dialog_frame, text = 'Yes', font = ('TkDefaultFont', 10), variable = self.CheckVar_samplewt_yes, command = self.samplewt_yes).grid(row = 1, column = 1, sticky = 'w')
+        self.CheckVar_samplewt_yes = tk.Checkbutton(dialog_frame, text = 'Yes', font = ('TkDefaultFont', 10), variable = self.CheckVar_samplewt_yes, command = self.samplewt_yes).grid(row = 2, column = 1, sticky = 'w')
         
         self.CheckVar_samplewt_no = tk.IntVar()
         self.CheckVar_samplewt_no.set(0)
-        self.CheckVar_samplewt_no = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_samplewt_no, command = self.samplewt_no).grid(row = 1, column = 1, sticky = 'e')
+        self.CheckVar_samplewt_no = tk.Checkbutton(dialog_frame, text = 'No', font = ('TkDefaultFont', 10), variable = self.CheckVar_samplewt_no, command = self.samplewt_no).grid(row = 2, column = 1, sticky = 'e')
         
     def spike_no(self):
         """
@@ -5231,7 +5245,7 @@ class Application_preset(tk.Toplevel):
         
         if self.spike_yes == 1:
             spike_conc_three = self.spike_conc_three.get()
-            spike_conc_nine = 1.0
+            spike_conc_nine = self.spike_conc_nine.get()
         
             preset_values[0] = spike_conc_three
             preset_values[1] = spike_conc_nine
