@@ -1,15 +1,17 @@
 # Isotope_Lab_Programs
 Programs for reducing data run on MC-ICP-MS for U/Th dating using SEM and Cups methods
 
-##### Programs include calculation for chemistry and reagent blanks run on SEM methods and standards/age files run on either SEM or Cups methods. 
+##### Programs include calculation for chemistry and reagent blanks run on SEM methods and standards/age files run on either SEM or Cups methods. An additional age calculation program is available specific for corals.
 
-Programs included are AgeCalculation.py, ChemBlankCalculation.py, ReagenBlankCalculation.py and StandardCalculation.py. Programs can also be accessed as an executable file for either Mac or PC, located in additional repositories under the user's profile. 
+Programs included are AgeCalculation.py, ChemBlankCalculation.py, ReagenBlankCalculation.py and StandardCalculation.py. Programs can also be accessed as an executable file for Mac, located in additional repository under the user's profile. Directions for downloading Python files are available at Python_instructions.pdf on this repository. Please do frequent "git status" commands to ensure you have the most updated versions of the files.
 
-Note: A chemblank file must be created using the ChemBlankCalculation program before running AgeCalculation on SEM or Cups. This program uses the output of the chemblank program in its calculuation. Additionally, a spiked standard 234/238 ratio must be calculated using StandardCalculation before running AgeCalculation on Cups. 
+Note: A chemblank file must be created using the ChemBlankCalculation program before running AgeCalculation on SEM or Cups. This program uses the output of the chemblank program in its calculation. A "blank" chemblank file has been uploaded to this GitHub repository to run if you did not run a blank. Additionally, a spiked standard 234/238 ratio must be calculated using StandardCalculation before running AgeCalculation on Cups. 
 
 Files may be uploaded into the program from anywhere on your computer. Output files will be located in the same folder where your programs are located.
 
 Shown below are the divisions of each file: 
+
+Note: AgeCalculation_coral.py is the same as AgeCalculation.py, but provides an option for inputting a specific 229Th spike concentration. Corals are spiked at different 233/229 ratios, and thus separate input is needed.
 
 ## AgeCalculation.py
 ---------
