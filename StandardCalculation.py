@@ -1210,33 +1210,33 @@ class Application_cups(tk.Frame):
         elif self.Uwash == "cups":
             
             #233 
-            working_three_mb = isofilter(self.filename_spiked_wash, "D", 44)
+            working_three_mb = isofilter(self.filename_spiked_wash, "C", 44)
             three_mb = working_three_mb.getMean() * 62422000
             three_mb_err = (2 * working_three_mb.getStanddev()/np.sqrt(working_three_mb.getCounts())) * 6242000
             
             #234
-            working_four_mb = isofilter(self.filename_spiked_wash, "E", 44)
+            working_four_mb = isofilter(self.filename_spiked_wash, "D", 44)
             four_mb = working_four_mb.getMean() * 62422000
             four_mb_err = (2 * working_four_mb.getStanddev()/np.sqrt(working_four_mb.getCounts())) * 6242000
             
             #235
-            working_five_mb = isofilter(self.filename_spiked_wash, "F", 44)
+            working_five_mb = isofilter(self.filename_spiked_wash, "E", 44)
             five_mb = working_five_mb.getMean() * 62422000
             five_mb_err = (2 * working_five_mb.getStanddev()/np.sqrt(working_five_mb.getCounts())) * 6242000
             
             #236
-            working_six_mb = isofilter(self.filename_spiked_wash, "G", 44)
+            working_six_mb = isofilter(self.filename_spiked_wash, "F", 44)
             six_mb = working_six_mb.getMean() * 62422000 
             six_mb_err = (2 * working_six_mb.getStanddev()/np.sqrt(working_six_mb.getCounts())) * 6242000
             
             #237
-            working_seven_mb = isofilter(self.filename_spiked_wash, "H", 44)
+            working_seven_mb = isofilter(self.filename_spiked_wash, "G", 44)
             seven_mb = working_seven_mb.getMean()
             if seven_mb < 0: seven_mb = 0.0
             seven_mb_err = 2 * working_seven_mb.getStanddev()/np.sqrt(working_seven_mb.getCounts())
             
             #238
-            working_eight_mb = isofilter(self.filename_spiked_wash, "I", 44)
+            working_eight_mb = isofilter(self.filename_spiked_wash, "H", 44)
             eight_mb = working_eight_mb.getMean() * 62422000
             eight_mb_err = (2 * working_eight_mb.getStanddev()/np.sqrt(working_eight_mb.getCounts())) * 6242000
         
