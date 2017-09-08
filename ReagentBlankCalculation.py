@@ -20,6 +20,8 @@ import openpyxl
 import csv
 import os
 from itertools import islice
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 class Application(tk.Frame):
     """
@@ -216,7 +218,7 @@ class Application(tk.Frame):
         self.u_regblankwash_checkbutton = tk.Checkbutton(checkbutton_frame, text = 'Uploaded', font = ('TkDefaultFont', 10) , variable = self.CheckVar_u_regblankwash).grid(row = 1, column = 1, sticky = 'w')
         
         #run reagent blank calculation        
-        self.chemblank = tk.Button(checkbutton_frame, text = 'Calculate chemblank and export data', font = ('TkDefaultFont', 10) , command = self.blank_calculate, default = 'active').grid(row = 2, column = 1, sticky = 'w')
+        self.chemblank = tk.Button(checkbutton_frame, text = 'Calculate reagent blank and export data', font = ('TkDefaultFont', 10) , command = self.blank_calculate, default = 'active').grid(row = 2, column = 1, sticky = 'w')
         
         #quit
         self.quit = tk.Button(checkbutton_frame, text="QUIT", font = ('TkDefaultFont', 10) , command= self.quit_program).grid(row = 2, column = 2, sticky = 'w')
@@ -414,6 +416,12 @@ class Application(tk.Frame):
         working_f = chem_blank(self.filename_th_regblank, "E", "232")
         two = working_f.calc()
         
+        #230 unfiltered beam for plot
+        self.zero_beam_array = working_d.array()
+            
+        #230 index array
+        working_z = chem_blank(self.filename_th_regblank, "A", "other")
+        self.index_array_Th = working_z.array()
         
         """
         U wash and chem blank values
@@ -468,6 +476,13 @@ class Application(tk.Frame):
         working_p = chem_blank(self.filename_u_regblank, "H", "238")
         eight = working_p.calc()
         
+        #234 unfiltered beam for plot
+        self.four_beam_array = working_j.array()
+            
+        #234 index array
+        working_q = chem_blank(self.filename_u_regblank, "A", "other")
+        self.index_array_U = working_q.array()
+        
         #deleting excel files
         try:
             os.remove("regblankth_wash.xlsx")
@@ -499,7 +514,7 @@ class Application(tk.Frame):
         three_blank_rel_err = np.sqrt((three_wash[2]*three_wash[0])**2 + (three[2]*three[0])**2)/abs(three_blank)
         
         #234 reagent blank cps
-        four_blank = three[0] - four_wash[0]
+        four_blank = four[0] - four_wash[0]
         four_blank_rel_err = np.sqrt((four_wash[2]*four_wash[0])**2 + (four[2]*four[0])**2)/abs(four_blank)
         
         #235 reagent blank cps
@@ -514,6 +529,7 @@ class Application(tk.Frame):
         eight_blank = eight[0] - eight_wash[0]
         eight_blank_rel_err = np.sqrt((eight_wash[2]*eight_wash[0])**2 + (eight[2]*eight[0])**2)/abs(eight_blank)
         
+
         """
         Reagent blank and error in grams
         """
@@ -550,6 +566,7 @@ class Application(tk.Frame):
         eight_regblank = (self.sln_wt * eight_blank * (10.**3))/(self.IE * self.uptake_rate * (6.022E23)) * self.wt_238 * (10.**15)
         eight_regblank_err = abs(eight_blank_rel_err * eight_regblank)
         
+        
         """
         Export to Excel
         """
@@ -574,6 +591,11 @@ class Application(tk.Frame):
         
         messagebox.showinfo("Reagent blank data file saved ! ", "Reagent blank data file name: "+ str(self.filename))
 
+        #plots 234 and 230 beam to check for beam stability
+        wb = plot_figure(self.four_beam_array, self.index_array_U, self.zero_beam_array, self.index_array_Th)
+        
+        wb.plot_fig()
+        
 class chem_blank():
         """
         Class for analyzing ICP-MS files
@@ -591,7 +613,7 @@ class chem_blank():
             int_time = str(int_time)
             
             int_dictionary = {"229":0.131, "230":1.049, "232":0.262, "233":0.131, "234":1.049,
-                              "235": 0.262, "236":0.131, "238": 0.262}
+                              "235": 0.262, "236":0.131, "238": 0.262, "other": 0.0}
             
             if int_time in int_dictionary:
                 self.inttime = int_dictionary[int_time]
@@ -630,6 +652,80 @@ class chem_blank():
         
             #returns list of mean, counts, and 2s counting error 
             return lst_blank
+        
+        def array(self):
+            """
+            Code provides output array for Excel row. Includes NaN for non-values
+            """
+            outlist = []
+            for row in self.ws.iter_rows(self.column.format(2, self.ws.max_row - 8)):
+                for cell in row:
+                    if cell.value: 
+                        try:
+                            value = float(cell.value)
+                            outlist.append(value)
+                        except:
+                            outlist.append(np.nan)
+                    elif cell.value == 0:
+                        value= 0.00
+                        outlist.append(value)
+                    else: outlist.append(np.nan)
+            outarray = np.array(outlist, dtype = np.float)
+            return outarray
+
+class plot_figure(tk.Tk):
+    """
+    Provides plot of 234U and 230Th beam stability
+    """
+    
+    def __init__(self, U, Uindex, Th, Thindex):
+        """
+        Init def
+        """
+        self.U = U
+        self.Uindex = Uindex
+        self.Th = Th
+        self.Thindex = Thindex
+      
+    def plot_fig(self): 
+        """
+        plot of 234U and 230Th beam
+        """
+        toplevel = tk.Toplevel()
+        toplevel.title("Beam intensity")
+        fig = Figure(figsize = (8, 6))
+        
+        ax1 = fig.add_subplot(2,1,1)
+        x1 = self.Uindex
+        y1 = self.U
+        y1mean = np.nanmean(y1)
+        y1standdev = np.nanstd(a = y1, ddof = 1)
+        ax1.scatter(x1, y1, color = 'b', marker = 'o')
+        ax1.set_xlabel('Cycles', fontsize = 7, labelpad = 0.5)
+        ax1.set_ylabel('234U', fontsize = 7, labelpad = 0.5)
+        ax1.set_ylim([y1mean - 10*y1standdev, y1mean + 10*y1standdev])
+        ax1.tick_params(labelsize = 5)
+        ax1.set_title('Beam Intensity 234U' , fontsize = 8)
+        
+        ax2 = fig.add_subplot(2,1,2)
+        x2 = self.Thindex
+        y2 = self.Th
+        y2mean = np.nanmean(y2)
+        y2standdev = np.nanstd(a = y2, ddof = 1)
+        ax2.scatter(x2, y2, color = 'c', marker = 'o')
+        ax2.set_xlabel('Cycles', fontsize = 7, labelpad = 0.5)
+        ax2.set_ylabel('230Th', fontsize = 7, labelpad = 0.5)
+        ax2.set_ylim([y2mean - 10*y2standdev, y2mean + 10*y2standdev])
+        ax2.tick_params(labelsize = 5)
+        ax2.set_title('Beam Intensity 230Th', fontsize = 8)
+        
+        fig.set_tight_layout(True)
+        
+        canvas = FigureCanvasTkAgg(fig, master = toplevel)
+        canvas.show()
+        canvas.get_tk_widget().pack()
+        toplevel.mainloop()
+
        
             
 root = tk.Tk()

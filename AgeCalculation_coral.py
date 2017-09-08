@@ -2079,8 +2079,8 @@ class Application_sem():
         sheet['B' + row] = self.sample_name
         sheet['C' + row] = "{0:.1f}".format(eight_ppb)
         sheet['D' + row] = "± " + "{0:.1f}".format(eight_ppb_wt_err)
-        sheet['E' + row] = "{0:.0f}".format(two_ppt)
-        sheet['F' + row] = "± " + "{0:.0f}".format(two_ppt_wt_err)
+        sheet['E' + row] = "{0:.1f}".format(two_ppt)
+        sheet['F' + row] = "± " + "{0:.1f}".format(two_ppt_wt_err)
         sheet['G' + row] = "{0:.1f}".format(zero_two_atomic_final)
         sheet['H' + row] = "± " + "{0:.1f}".format(zero_two_atomic_err_final)
         sheet['I' + row] = "{0:.1f}".format(d234U_m)
@@ -2475,8 +2475,8 @@ class Application_semcups():
         sheet['B' + row] = self.sample_name
         sheet['C' + row] = "{0:.1f}".format(eight_ppb)
         sheet['D' + row] = "± " + "{0:.1f}".format(eight_ppb_wt_err)
-        sheet['E' + row] = "{0:.0f}".format(two_ppt)
-        sheet['F' + row] = "± " + "{0:.0f}".format(two_ppt_wt_err)
+        sheet['E' + row] = "{0:.1f}".format(two_ppt)
+        sheet['F' + row] = "± " + "{0:.1f}".format(two_ppt_wt_err)
         sheet['G' + row] = "{0:.1f}".format(zero_two_atomic_final)
         sheet['H' + row] = "± " + "{0:.1f}".format(zero_two_atomic_err_final)
         sheet['I' + row] = "{0:.1f}".format(d234U_m)
@@ -2851,8 +2851,8 @@ class Application_cups():
         sheet['B' + row] = self.sample_name
         sheet['C' + row] = "{0:.1f}".format(eight_ppb)
         sheet['D' + row] = "± " + "{0:.1f}".format(eight_ppb_wt_err)
-        sheet['E' + row] = "{0:.0f}".format(two_ppt)
-        sheet['F' + row] = "± " + "{0:.0f}".format(two_ppt_wt_err)
+        sheet['E' + row] = "{0:.1f}".format(two_ppt)
+        sheet['F' + row] = "± " + "{0:.1f}".format(two_ppt_wt_err)
         sheet['G' + row] = "{0:.1f}".format(zero_two_atomic_final)
         sheet['H' + row] = "± " + "{0:.1f}".format(zero_two_atomic_err_final)
         sheet['I' + row] = "{0:.1f}".format(d234U_m)
@@ -5226,7 +5226,7 @@ class Application_preset(tk.Toplevel):
         self.zerotwo_err.grid(row = 1, column = 1, sticky = 'w')
         self.zerotwo_err.focus_set
         
-        self.submit_button = tk.Button(dialog_frame, text = "Submit", font = ('TkDefaultFont', 10), default = "active", command = self.click_submit).grid(row = 2, column = 0)
+        self.submit_button = tk.Button(dialog_frame, text = "Submit", font = ('TkDefaultFont', 10), default = "active", command = self.click_submit).grid(row = 2, column = 1, sticky = 'w')
         
     def zerotwo_no(self):
         """
@@ -5236,7 +5236,7 @@ class Application_preset(tk.Toplevel):
         dialog_frame = tk.Frame(self.otherframe)
         dialog_frame.pack()
         
-        self.submit_button = tk.Button(dialog_frame, text = "Submit", font = ('TkDefaultFont', 10), default = "active", command = self.click_submit).grid(row = 0, column = 0)
+        self.submit_button = tk.Button(dialog_frame, text = "Submit", font = ('TkDefaultFont', 10), default = "active", command = self.click_submit).grid(row = 0, column = 1, sticky = 'w')
         
     def click_submit(self):
         """

@@ -5212,7 +5212,7 @@ class Application_preset(tk.Toplevel):
         self.zerotwo_err.grid(row = 1, column = 1, sticky = 'w')
         self.zerotwo_err.focus_set
         
-        self.submit_button = tk.Button(dialog_frame, text = "Submit", font = ('TkDefaultFont', 10), default = "active", command = self.click_submit).grid(row = 2, column = 0)
+        self.submit_button = tk.Button(dialog_frame, text = "Submit", font = ('TkDefaultFont', 10), default = "active", command = self.click_submit).grid(row = 2, column = 1, sticky = 'w')
         
     def zerotwo_no(self):
         """
@@ -5222,7 +5222,7 @@ class Application_preset(tk.Toplevel):
         dialog_frame = tk.Frame(self.otherframe)
         dialog_frame.pack()
         
-        self.submit_button = tk.Button(dialog_frame, text = "Submit", font = ('TkDefaultFont', 10), default = "active", command = self.click_submit).grid(row = 0, column = 0)
+        self.submit_button = tk.Button(dialog_frame, text = "Submit", font = ('TkDefaultFont', 10), default = "active", command = self.click_submit).grid(row = 0, column = 1, sticky = 'w')
         
     def click_submit(self):
         """

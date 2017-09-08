@@ -417,13 +417,12 @@ class Application_sem(tk.Frame):
         self.four_three_norm = self.four_three_mean_meas * (self.spike/self.six_three_corr)**rat
         
         #calculates delta 234 and 2s error
-        self.d_234 = (((((( self.four_five_normcorr * (1 - (self.wash/(self.three_mean_meas * self.five_three_norm * self.four_five_normcorr))))/ self.eight_five_rat) 
-                            * (1 - (self.spike_four_three/self.four_three_norm))) / (1 - (self.spike_five_three/self.five_three_norm)))
+        self.d_234 = (((((( self.four_five_normcorr * (1 - self.wash/(self.three_mean_meas * self.five_three_norm * self.four_five_normcorr)))/ self.eight_five_rat) 
+                            * (1 - self.spike_four_three/self.four_three_norm)) / (1 - self.spike_five_three/self.five_three_norm))
                             * (lambda_234/lambda_238)) - 1) * 1000
         
         self.d_234_err = self.four_five_normcorr_err * ( (1/self.eight_five_rat) * (lambda_234/lambda_238) ) * (1 - (self.spike_four_three/self.four_three_norm) ) / (1 - (self.spike_five_three/self.five_three_norm))  * 1000
         
-                         
         # message box 
         messagebox.showinfo( "112A STANDARD VALUES: ",
         "\n236/233: " + str("{0:.5f}".format(self.six_three_mean_meas)) + " ± " + str("{0:.6f}".format(self.six_three_err_meas)) +\
@@ -1044,7 +1043,7 @@ class Application_cups(tk.Frame):
         self.six_seven_err = self.six_seven_tail * max(six_2s_rel_err_corr, 0.05)
         
         """
-        Optional message box for displaying unspiked tail values. Delete quotation marks to run.
+        # Optional message box for displaying unspiked tail values. Delete quotation marks to run.
         # message box 
         messagebox.showinfo( "UNSPIKED STANDARD TAIL VALUES: ",
         "\n233/237: " + str("{0:.4f}".format(self.three_seven_tail)) + " ± " + str("{0:.4f}".format(self.three_seven_err)) +\
@@ -1239,8 +1238,7 @@ class Application_cups(tk.Frame):
             working_eight_mb = isofilter(self.filename_spiked_wash, "H", 44)
             eight_mb = working_eight_mb.getMean() * 62422000
             eight_mb_err = (2 * working_eight_mb.getStanddev()/np.sqrt(working_eight_mb.getCounts())) * 6242000
-        
-        
+       
         """
         Measured beam intensities
         """
