@@ -1465,11 +1465,13 @@ class Application(tk.Frame):
             self.chem_lst = [zero, zero_err, two, two_err, four, four_err, five, five_err, eight, eight_err]
             self.CheckVar_chemblank_upload.set(1)
             return self.chem_lst
+        
         except OSError as err:
             messagebox.showwarning("Error", str(err))
         except:
-            messagebox.showerror("Unexpected error:", str(sys.exc_info()[:])) 
-    
+            messagebox.showerror("Unexpected error:", str(sys.exc_info()[:]))
+
+
     def file_upload_export(self):
         """
         Uploads age spreadsheet and once loaded marks checkbox
@@ -1702,7 +1704,7 @@ class Application_sem():
         wb_Th = Thcalculation(self.spike, self.AS_Th, self.file_Th, lstU_Th)
         
         self.lstTh_Age = wb_Th.Th_normalization_forAge() #provides a list for use in Age Calculation
-  
+        
         """
             Th_normalization_forAge output is a list of the following values: 
                 [0]: 230/229 corrected and normalized ratio
